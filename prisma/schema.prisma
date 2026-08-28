@@ -1,0 +1,174 @@
+// Student Life Relocation Agent — MVP data model (spec §14)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum HousingStatus {
+  SECURED
+  SEARCHING
+}
+
+enum Priority {
+  CRITICAL
+  HIGH
+  MEDIUM
+  LOW
+}
+
+enum PlanPhase {
+  BEFORE_ARRIVAL
+  FIRST_24_HOURS
+  FIRST_7_DAYS
+  ONGOING
+}
+
+enum TaskStatus {
+  OPEN
+  DONE
+}
+
+enum MessageRole {
+  USER
+  ASSISTANT
+  SYSTEM
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  relocationProfile RelocationProfile?
+  housingProfile    HousingProfile?
+  tasks             Task[]
+  lifePlans         LifePlan[]
+  savedPlaces       SavedPlace[]
+  conversations     Conversation[]
+}
+
+model RelocationProfile {
+  id                    String    @id @default(cuid())
+  userId                String    @unique
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  origin                String
+  destination           String
+  destinationLat        Float?
+  destinationLng        Float?
+  arrivalDate           DateTime
+  arrivalTime           String?
+  monthlyBudget         Float?
+  transportation        String[]  @default([])
+  interests             String[]  @default([])
+  homeAddress           String?
+  homeLat               Float?
+  homeLng               Float?
+  onboardingCompletedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model HousingProfile {
+  id        String        @id @default(cuid())
+  userId    String        @unique
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status    HousingStatus @default(SEARCHING)
+  budget    Float?
+  address   String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Task {
+  id             String     @id @default(cuid())
+  userId         String
+  user           User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title          String
+  description    String?
+  reason         String? // why this task matters — powers "See why a task is important"
+  priority       Priority   @default(MEDIUM)
+  phase          PlanPhase  @default(BEFORE_ARRIVAL)
+  status         TaskStatus @default(OPEN)
+  category       String? // HOUSING | TRANSPORT | CONNECTIVITY | MONEY | FOOD | HEALTH | SETUP ...
+  estimateMinutes Int?
+  dueDate        DateTime?
+  source         String     @default("PLAN") // PLAN | USER
+  sortOrder      Int        @default(0)
+  completedAt    DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, status])
+}
+
+model LifePlan {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  summary       String
+  priorities    Json // [{ title, priority, reason }]
+  first24Hours  Json // string[]
+  first7Days    Json // [{ day, tasks: string[] }]
+  ongoing       Json // string[]
+  generatedBy   String   @default("heuristic") // AI provider that produced it
+  reason        String? // what triggered generation
+  version       Int      @default(1)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model SavedPlace {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  externalId      String?
+  name            String
+  category        String // GROCERY | PHARMACY | HEALTHCARE | TRANSIT | LAUNDRY
+  address         String
+  lat             Float?
+  lng             Float?
+  distanceMeters  Float?
+  mapsUrl         String?
+  source          String   @default("demo") // google_places | demo
+  createdAt       DateTime @default(now())
+
+  @@unique([userId, externalId])
+  @@index([userId, category])
+}
+
+model Conversation {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  messages ConversationMessage[]
+}
+
+model ConversationMessage {
+  id             String      @id @default(cuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  role           MessageRole
+  content        String
+  agentUsed      String? // which agent answered (for transparency in UI)
+  createdAt      DateTime    @default(now())
+
+  @@index([conversationId])
+}
