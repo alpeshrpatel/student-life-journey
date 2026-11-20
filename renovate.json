@@ -2,5 +2,11 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
   "schedule": ["before 6am on monday"],
-  "packageRules": [{ "matchUpdateTypes": ["major"], "enabled": false }]
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    }
+  ],
+  "commitMessageSuffix": "(no-story)"
 }
