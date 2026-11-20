@@ -20,7 +20,7 @@
 ## Status
 - Stories on disk: 236 of 253 (R0 47, R1 95, R2 62, R3 32 of 40, R4 0 of 9); 28 ADRs written
 - Last story written: S-R3-032; next to write: **S-R3-033**
-- Execution: R0 17 of 47 done (S-R0-001 `1eadc09ea9`, S-R0-002 `bd5e8e5974`, S-R0-003 `ab87151cd2`, S-R0-004 `3371d9acdb`, S-R0-005 `f13f9afde0`, S-R0-006 `b6461e98c6`, S-R0-007 `262da8479b`, S-R0-008 `d5791fe532`, S-R0-009 `1519f77ad4`, S-R0-010 `7bf7320a06`, S-R0-012 `3bcd997dab`, S-R0-016 `6444d9ff1f`, S-R0-017 `131b4eac71`, S-R0-018 `93ce326ec1`, S-R0-019 `abc7775bd3`, S-R0-020 `e68c439b6d`, S-R0-024 `318bc24327`); batch 01 on `exec/batch-01-r0`, PR [#2](https://github.com/alpeshrpatel/student-life-journey/pull/2); next: S-R0-007
+- Execution: R0 18 of 47 done (S-R0-001 `1eadc09ea9`, S-R0-002 `bd5e8e5974`, S-R0-003 `ab87151cd2`, S-R0-004 `3371d9acdb`, S-R0-005 `f13f9afde0`, S-R0-006 `b6461e98c6`, S-R0-007 `262da8479b`, S-R0-008 `d5791fe532`, S-R0-009 `1519f77ad4`, S-R0-010 `7bf7320a06`, S-R0-012 `3bcd997dab`, S-R0-016 `6444d9ff1f`, S-R0-017 `131b4eac71`, S-R0-018 `93ce326ec1`, S-R0-019 `abc7775bd3`, S-R0-020 `e68c439b6d`, S-R0-024 `318bc24327`, S-R0-026 `2158cf0b72`); batch 01 on `exec/batch-01-r0`, PR [#2](https://github.com/alpeshrpatel/student-life-journey/pull/2); next: S-R0-007
 
 ## Next / TODO
 - [ ] Write remaining stories S-R3-033..040 and S-R4-001..009, then `tracker.py sync`
@@ -36,6 +36,7 @@
 - Delete or relocate `docs/TechnicalArchitecture.docx` (describes a different product)
 
 ## Changelog (newest first)
+- 2026-11-20 — S-R0-026 done: `computeFirstPriority` rule table in the domain package (`2158cf0b72`)
 - 2026-11-20 — S-R0-024 done: `relocation_profile` table, migration and repository (`318bc24327`)
 - 2026-11-20 — S-R0-021 partly done, BLOCKED for `me()`: `@slj/api-client` with `health()` and `config()`; `me()` still to add after S-R0-014 (`c72763466e`)
 - 2026-11-20 — S-R0-020 done: i18n scaffolding (English), locale-aware formatters (`e68c439b6d`)

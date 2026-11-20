@@ -609,7 +609,7 @@ Columns: story · title · executor tier (`1`, `2`, `3`, `HUMAN`) · size · dep
 | S-R0-023 | Build sign-in screen | 1 | S | S-R0-018, S-R0-020, S-R0-022 | TODO | — | — |
 | S-R0-024 | Add relocation profile table and repository | 2 | M | S-R0-012 | DONE | 318bc24327 | — |
 | S-R0-025 | Add onboarding endpoint | 2 | M | S-R0-004, S-R0-014, S-R0-024 | TODO | — | — |
-| S-R0-026 | Compute first priority in domain | 1 | S | S-R0-004 | TODO | — | — |
+| S-R0-026 | Compute first priority in domain | 1 | S | S-R0-004 | DONE | 2158cf0b72 | — |
 | S-R0-027 | Add dashboard endpoint | 2 | S | S-R0-025, S-R0-026 | TODO | — | — |
 | S-R0-028 | Build app shell with navigation | 2 | M | S-R0-018, S-R0-022 | TODO | — | — |
 | S-R0-029 | Build minimal onboarding wizard | 2 | M | S-R0-019, S-R0-022, S-R0-025 | TODO | — | — |

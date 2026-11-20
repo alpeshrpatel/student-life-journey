@@ -415,3 +415,23 @@ The "PR: pending" part is replaced by the pull request link when the PR is opene
 - **Deviations:** `pnpm depcruise` does not exist yet (S-R0-032), so it was not run. The repository test also asserts that `upsert` costs exactly one database call. drizzle-kit did not touch the auth tables (stop condition not triggered).
 - **Follow-ups for the founder:** none
 
+### S-R0-026 — Compute first priority in domain
+- **Result:** DONE
+- **When:** 2026-11-20T21:59Z · **Tier / size:** 1 / S · **Branch:** `exec/batch-01-r0`
+- **Code commit:** `2158cf0b72` — `feat(domain): compute first priority (S-R0-026)`
+- **Size of change:** 4 files changed, 176 insertions(+)
+- **What changed:**
+  - `packages/domain/src/tasks/types.ts`: `PrioritySchema` and `TaskCategorySchema`.
+  - `packages/domain/src/priority/first-priority.ts`: `computeFirstPriority` implementing the five-row rule table (first match wins), with singular "1 day" and the arrive-today wording.
+  - 8 tests (one per rule row, boundaries 0, 1, 14, 15, −1, singular case, destination with spaces); exports added to `index.ts`.
+- **Verification:**
+  | Command | Result |
+  |---|---|
+  | `pnpm --filter @slj/domain test` | 26 passed |
+  | `pnpm typecheck / lint / format:check` | exit 0 (domain purity rules active) |
+  | `pnpm test` | all packages pass |
+  | `secret scan on staged diff` | clean |
+- **Acceptance criteria:** AC1 PASS — `SEARCHING`, 12, "Phoenix" gives `housing.find`, CRITICAL, reason contains "Phoenix" and "12 days" · AC2 PASS — 14 days gives `arrival.airport_transport`, 15 gives `housing.confirm_move_in` · AC3 PASS — −3 gives `places.find_essentials` · AC4 PASS — 1 day reads "1 day", not "1 days"
+- **Deviations:** none
+- **Follow-ups for the founder:** none
+
