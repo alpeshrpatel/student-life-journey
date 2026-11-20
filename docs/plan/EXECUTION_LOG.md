@@ -23,7 +23,7 @@ When you finish one: tick the box, and for a HUMAN-tier story run `python3 docs/
 
 <!-- One line each: story id — what is wrong — suggested fix. The agent never edits the plan; the planner reads this list. -->
 
-(none)
+- S-R0-002 — pnpm 12 ignores `engine-strict` in `.npmrc`, so the Node 20/22 install does not fail (AC3) — add `engineStrict: true` to the `pnpm-workspace.yaml` content in the story (applied by the executor)
 
 ---
 
@@ -55,3 +55,25 @@ The "PR: pending" part is replaced by the pull request link when the PR is opene
 - **Acceptance criteria:** AC1 PASS — `git ls-files` for root `src`, `prisma`, `next.config.mjs`, `package-lock.json` prints nothing; root contains only `docs`, `legacy`, `.claude` and the two untracked founder files · AC2 PASS — `git diff --cached -M` reports `R100` for the calculator file at its new path · AC3 PASS — a freshly created `.DS_Store` is ignored (`git check-ignore -v` shows `.gitignore:13`)
 - **Deviations:** (1) Worked on the batch branch `exec/batch-01-r0` instead of the story's `refactor/S-R0-001-archive-prototype` (the executor prompt wins on process). (2) Batch base is `Architecture` (the branch checked out at start; `main` does not yet contain the plan). (3) `docs/TechnicalArchitecture.docx` was already absent from the index, so nothing to stage for it. (4) Start-of-run check found two untracked founder files (`CLAUDE.md`, `PROGRESS_LOG.md`); the run continued because the founder's ARGS ask for `PROGRESS_LOG.md` to be maintained; they were never staged in story commits.
 - **Follow-ups for the founder:** none
+
+### S-R0-002 — Initialise pnpm workspace root
+- **Result:** DONE
+- **When:** 2026-11-20T21:00Z · **Tier / size:** 1 / S · **Branch:** `exec/batch-01-r0`
+- **Code commit:** `bd5e8e5974` — `build(repo): initialise pnpm workspace root (S-R0-002)`
+- **Size of change:** 10 files changed, 997 insertions(+); main areas: repo root config, `pnpm-lock.yaml`
+- **What changed:**
+  - Created `package.json`, `pnpm-workspace.yaml`, `.node-version`, `.npmrc`, `mise.toml`, `.editorconfig`, `tsconfig.base.json`, `LICENSE`, `renovate.json` with the content given in the story.
+  - Installed Node 24.22.3 and pnpm 12.18.0 locally through mise (the machine had Node 22) and ran `pnpm install`, which resolved TypeScript 6.0.3 and Vitest 4.1.12 and wrote `pnpm-lock.yaml`.
+- **Verification:**
+  | Command | Result |
+  |---|---|
+  | `node -v` / `pnpm -v` (mise, Node 24) | v24.22.3 / 12.18.0 |
+  | `pnpm install --frozen-lockfile` | exit 0 |
+  | `pnpm exec tsc --version` | Version 6.0.3 |
+  | `pnpm typecheck` / `pnpm test` | exit 0 ("No projects matched the filters", as expected) |
+  | `pnpm install` under Node 22 in a clean copy | fails with `ERR_PNPM_UNSUPPORTED_ENGINE` |
+  | secret scan on staged diff | `exit=1` (clean) |
+- **Acceptance criteria:** AC1 PASS — frozen-lockfile install exit 0 on Node 24.22.3 · AC2 PASS — typecheck and test exit 0 · AC3 PASS — Node 22 install fails with the engine error (after the deviation below)
+- **Deviations:** pnpm 12 ignores `engine-strict` in `.npmrc`, so AC3 failed with only the specified files (Node 22 installed without error). Added `engineStrict: true` to `pnpm-workspace.yaml` (the tool's current option location). `.npmrc` still has the two specified lines.
+- **Follow-ups for the founder:** your machine's default Node is 22.2.0; use `mise` (`mise install`) or `mise exec --` so Node 24.22.3 and pnpm 12.18.0 are active. Planner: story S-R0-002 should list `engineStrict: true` in `pnpm-workspace.yaml` (added under Plan issues).
+

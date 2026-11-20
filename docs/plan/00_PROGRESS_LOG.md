@@ -585,7 +585,7 @@ Columns: story · title · executor tier (`1`, `2`, `3`, `HUMAN`) · size · dep
 | ID | Title | Tier | Size | Depends on | Status | Commit | PR |
 |---|---|---|---|---|---|---|---|
 | S-R0-001 | Archive prototype under legacy | 1 | S | — | DONE | 1eadc09ea9 | — |
-| S-R0-002 | Initialise pnpm workspace root | 1 | S | S-R0-001 | TODO | — | — |
+| S-R0-002 | Initialise pnpm workspace root | 1 | S | S-R0-001 | DONE | bd5e8e5974 | — |
 | S-R0-003 | Add lint and format toolchain | 2 | S | S-R0-002 | TODO | — | — |
 | S-R0-004 | Create domain package with date math | 1 | S | S-R0-002 | TODO | — | — |
 | S-R0-005 | Create contracts package with error codes | 1 | S | S-R0-002 | TODO | — | — |

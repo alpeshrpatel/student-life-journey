@@ -20,13 +20,14 @@
 ## Status
 - Stories on disk: 236 of 253 (R0 47, R1 95, R2 62, R3 32 of 40, R4 0 of 9); 28 ADRs written
 - Last story written: S-R3-032; next to write: **S-R3-033**
-- Execution: R0 1 of 47 done (S-R0-001, `1eadc09ea9`); batch 01 on `exec/batch-01-r0`, PR not yet opened; next: S-R0-002
+- Execution: R0 2 of 47 done (S-R0-001 `1eadc09ea9`, S-R0-002 `bd5e8e5974`); batch 01 on `exec/batch-01-r0`, PR not yet opened; next: S-R0-003
 
 ## Next / TODO
 - [ ] Write remaining stories S-R3-033..040 and S-R4-001..009, then `tracker.py sync`
 - [ ] Generate `12_BACKLOG_INDEX.md`, run the review checklist, write `99_FINAL_REPORT.md`
 - [ ] Review the key ADRs (platform, data/DB, ORM, auth, stack-fit gate ADR-0000)
 - [ ] Human chores for R0 (you, outside the code): S-R0-011 Google OAuth web client, S-R0-036 Cloudflare account and databases, S-R0-039 Sentry project (details: `EXECUTION_LOG.md` → Human actions queue)
+- [ ] Use Node 24 locally: run `mise install` in the repo (your default Node is 22.2.0)
 - [ ] Execute R0 walking skeleton (in progress; track with `python3 docs/plan/tools/tracker.py summary`)
 
 ## Blocked / needs owner (from the board, re-check before acting)
@@ -35,6 +36,7 @@
 - Delete or relocate `docs/TechnicalArchitecture.docx` (describes a different product)
 
 ## Changelog (newest first)
+- 2026-11-20 — S-R0-002 done: pnpm workspace root, Node 24 / pnpm 12.18 toolchain pins, `tsconfig.base.json` (`bd5e8e5974`); needed `engineStrict: true` in `pnpm-workspace.yaml` (pnpm 12). Local default Node is 22, so use `mise`
 - 2026-11-20 — S-R0-001 done: prototype moved to `legacy/prototype/`, `.gitignore` and `legacy/README.md` added (`1eadc09ea9`); human stories S-R0-011, S-R0-036, S-R0-039 queued
 - 2026-11-15 — Executor prompt, execution log, tracker tool and `run-stories` command added (`9654eab`)
 - 2026-11-14/15 — Architecture finalized, stories created, scaling ladder defined (`5fc9bee`)
