@@ -227,3 +227,25 @@ The "PR: pending" part is replaced by the pull request link when the PR is opene
 - **Deviations:** `buildApp` takes an optional `logger` argument (default `consoleLogger`) so tests can capture lines; `requestLogger` is also exported as the default-wired middleware per the story. `durationMs` is 0 in the Workers runtime for fast requests (its clock only advances on I/O).
 - **Follow-ups for the founder:** none
 
+### S-R0-010 — Add D1 database with Drizzle
+- **Result:** DONE
+- **When:** 2026-11-20T21:44Z · **Tier / size:** 2 / M · **Branch:** `exec/batch-01-r0`
+- **Code commit:** `7bf7320a06` — `feat(api): add D1 database with Drizzle (S-R0-010)`
+- **Size of change:** 25 files changed, 1043 insertions(+), 32 deletions(-)
+- **What changed:**
+  - D1 binding `DB` (`slj-local`) in `wrangler.jsonc`; Drizzle (`drizzle-orm`, `drizzle-kit`), `drizzle.config.ts`, empty schema, `createDb`, scripts `db:generate` and `db:migrate:local`.
+  - `countingD1` decorator (1 per `batch()`, 1 per statement executed outside a batch), `buildContainer` composition root, `systemClock`, `uuidGenerator`; the container is built per request in a middleware that adds `x-db-calls` only in `dev` and `test`.
+  - Test setup: `applyMigrations` (glob of `migrations/*.sql`, split on `--> statement-breakpoint`, one `batch()`), `setupFiles`, `expectDbCalls`, a `req()` helper that passes real bindings; two isolation test files.
+- **Verification:**
+  | Command | Result |
+  |---|---|
+  | `pnpm test` | domain 18, contracts 7, api 42 passed (real D1 in workerd) |
+  | `pnpm typecheck / lint / format:check` | exit 0 |
+  | `pnpm --filter @slj/api db:generate (empty schema)` | No schema changes, nothing to migrate |
+  | `pnpm --filter @slj/api db:migrate:local` | No migrations to apply! (exit 0) |
+  | `pnpm --filter @slj/api build` | exit 0 |
+  | `secret scan on staged diff` | clean |
+- **Acceptance criteria:** AC1 PASS — `SELECT 1 AS one` returns `{ one: 1 }` · AC2 PASS — a route with `db.batch` of three statements returns `x-db-calls: 1` · AC3 PASS — `isolation-a` and `isolation-b` each insert into the same table name and see only their own row · AC4 PASS — header absent for `production` and `preview` (valid hosted configs)
+- **Deviations:** (1) `buildContainer` takes Hono's `ExecutionContext` type (the generated global type is generic and did not accept it) and does not use it yet. (2) Existing tests now call the app through `req()` in `test/helpers/request.ts`, because the new container middleware needs the real `Env`. (3) `$client` is not exposed on the typed `Db`, so the batch test uses `db.batch([db.run(sql...)])`. (4) `import.meta.glob` typing declared in `test/helpers/import-meta.d.ts`. (5) `drizzle.config.ts` added to the tsconfig `include`.
+- **Follow-ups for the founder:** V-07 (flat `NNNN_name.sql` versus one folder per migration) cannot be observed with an empty schema; check it when S-R0-012 generates the first migration.
+
