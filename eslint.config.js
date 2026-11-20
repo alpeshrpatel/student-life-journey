@@ -11,6 +11,7 @@ export default defineConfig(
     ignores: [
       "legacy/**",
       "**/dist/**",
+      "**/.wrangler/**",
       "**/coverage/**",
       "apps/api/worker-configuration.d.ts",
       "apps/mobile/ios/**",

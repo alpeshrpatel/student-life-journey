@@ -1,0 +1,7 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "slj",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-11-01",
+  "vars": { "ENVIRONMENT": "dev", "APP_BASE_URL": "http://localhost:5173", "FLAGS": "{}" },
+}
