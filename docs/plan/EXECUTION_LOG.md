@@ -334,3 +334,22 @@ The "PR: pending" part is replaced by the pull request link when the PR is opene
 - **Deviations:** `cn` uses `extendTailwindMerge` (not plain `twMerge`) because plain `twMerge` dropped `text-eyebrow` and `text-control` when combined with a text colour; covered by `lib/cn.test.ts`. While loading, the label is hidden with `invisible` and `aria-hidden` so the accessible name is `loadingLabel`. `Loader2` is called `LoaderCircle` in the installed `lucide-react`.
 - **Follow-ups for the founder:** none
 
+### S-R0-019 — Build Field and Input primitives
+- **Result:** DONE
+- **When:** 2026-11-20T21:53Z · **Tier / size:** 1 / S · **Branch:** `exec/batch-01-r0`
+- **Code commit:** `abc7775bd3` — `feat(web): build Field and Input primitives (S-R0-019)`
+- **Size of change:** 4 files changed, 212 insertions(+)
+- **What changed:**
+  - `ui/field.tsx`: `Field` (label, hint, error with `role="alert"` and an icon, required marker as a visually hidden word) and `fieldDescribedBy`.
+  - `ui/input.tsx`: 44 px `Input` with surface fill, control border, accent focus border, `invalid` state, non-interactive `prefix` (logical `ps-8` padding, `aria-hidden`) and hidden number spinners.
+  - Tests for both (13 new).
+- **Verification:**
+  | Command | Result |
+  |---|---|
+  | `pnpm --filter @slj/web test` | 84 passed |
+  | `pnpm typecheck / lint / format:check / build` | exit 0 (jsx-a11y satisfied, no disables) |
+  | `secret scan on staged diff` | clean |
+- **Acceptance criteria:** AC1 PASS — `getByLabelText("Moving to")` finds the input · AC2 PASS — alert contains the text and `aria-describedby` contains its id · AC3 PASS — no `aria-describedby` and no alert without hint or error · AC4 PASS — `$` rendered, input value is `1200`
+- **Deviations:** The `required` word is a module constant (`REQUIRED_WORD`) so `react/jsx-no-literals` passes without a disable; it moves to i18n in S-R0-020. Number-spinner hiding uses Tailwind arbitrary variants in the component because `styles/**` must not be touched. `fieldDescribedBy` options accept `undefined` explicitly (needed with `exactOptionalPropertyTypes`).
+- **Follow-ups for the founder:** none
+
