@@ -1,4 +1,5 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
+import { registerConfigRoutes } from "./http/routes/config.js";
 import { registerHealthRoutes } from "./http/routes/health.js";
 
 export interface AppBindings {
@@ -9,5 +10,6 @@ export interface AppBindings {
 export function buildApp(): OpenAPIHono<AppBindings> {
   const app = new OpenAPIHono<AppBindings>();
   registerHealthRoutes(app);
+  registerConfigRoutes(app);
   return app;
 }
