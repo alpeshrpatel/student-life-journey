@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { req } from "./helpers/request.js";
 import { buildApp } from "../src/app.js";
 import { createLogger, type Logger } from "../src/shared/logger.js";
 
@@ -55,7 +56,7 @@ describe("createLogger", () => {
 describe("request logger", () => {
   it("AC1: writes exactly one request line with status and a numeric duration", async () => {
     const { lines, logger } = capture();
-    const res = await buildApp(logger).request("/api/v1/health?secret=1", {
+    const res = await req(buildApp(logger), "/api/v1/health?secret=1", {
       headers: { "cf-ray": "ray-1" },
     });
     expect(res.status).toBe(200);
@@ -78,7 +79,7 @@ describe("request logger", () => {
     app.get("/__t/boom", () => {
       throw new Error("x");
     });
-    const res = await app.request("/__t/boom");
+    const res = await req(app, "/__t/boom");
     expect(res.status).toBe(500);
     expect(lines).toHaveLength(1);
     expect(lines[0]).toMatchObject({ level: "error", status: 500, route: "/__t/boom" });
@@ -88,8 +89,8 @@ describe("request logger", () => {
     const { lines, logger } = capture();
     const app = buildApp(logger);
     app.get("/__t/limited", (c) => c.json({}, 429));
-    await app.request("/__t/limited");
-    await app.request("/nope");
+    await req(app, "/__t/limited");
+    await req(app, "/nope");
     expect(lines.map((l) => [l.status, l.level])).toEqual([
       [429, "warn"],
       [404, "info"],

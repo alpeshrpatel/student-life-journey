@@ -1,6 +1,7 @@
 import { createRoute, z } from "@hono/zod-openapi";
 import { ERROR_STATUS, ErrorEnvelopeSchema, type ErrorCode } from "@slj/contracts";
 import { describe, expect, it } from "vitest";
+import { req } from "./helpers/request.js";
 import { buildApp } from "../src/app.js";
 import {
   type AppError,
@@ -44,7 +45,7 @@ function testApp() {
 
 describe("error envelope", () => {
   it("AC1: NotFoundError becomes a 404 envelope whose requestId matches x-request-id", async () => {
-    const res = await testApp().request("/__t/not-found");
+    const res = await req(testApp(), "/__t/not-found");
     expect(res.status).toBe(404);
     const body = ErrorEnvelopeSchema.parse(await res.json());
     expect(body.error.code).toBe("NOT_FOUND");
@@ -53,7 +54,7 @@ describe("error envelope", () => {
   });
 
   it("AC2: an unexpected error is a generic 500 that leaks nothing", async () => {
-    const res = await testApp().request("/__t/boom");
+    const res = await req(testApp(), "/__t/boom");
     expect(res.status).toBe(500);
     const text = await res.text();
     expect(text).not.toContain("secret detail");
@@ -64,20 +65,20 @@ describe("error envelope", () => {
   });
 
   it("handles non-Error thrown values without leaking them", async () => {
-    const res = await testApp().request("/__t/string-thrown");
+    const res = await req(testApp(), "/__t/string-thrown");
     expect(res.status).toBe(500);
     expect(await res.text()).not.toContain("secret detail");
   });
 
   it("AC3: an unknown path returns a NOT_FOUND envelope", async () => {
-    const res = await testApp().request("/api/v1/nope");
+    const res = await req(testApp(), "/api/v1/nope");
     expect(res.status).toBe(404);
     expect(ErrorEnvelopeSchema.parse(await res.json()).error.code).toBe("NOT_FOUND");
     expect(res.headers.get("x-request-id")).toBeTruthy();
   });
 
   it("AC4: an invalid body is a 422 naming the field", async () => {
-    const res = await testApp().request("/__t/validate", {
+    const res = await req(testApp(), "/__t/validate", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ arrivalDate: 5 }),
@@ -91,7 +92,7 @@ describe("error envelope", () => {
   });
 
   it("a malformed JSON body is VALIDATION_FAILED", async () => {
-    const res = await testApp().request("/__t/validate", {
+    const res = await req(testApp(), "/__t/validate", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: "{not json",
@@ -101,7 +102,7 @@ describe("error envelope", () => {
   });
 
   it("uses cf-ray as the request id when present", async () => {
-    const res = await testApp().request("/__t/not-found", { headers: { "cf-ray": "ray-123" } });
+    const res = await req(testApp(), "/__t/not-found", { headers: { "cf-ray": "ray-123" } });
     expect(res.headers.get("x-request-id")).toBe("ray-123");
   });
 });
