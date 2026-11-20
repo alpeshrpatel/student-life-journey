@@ -36,6 +36,7 @@
 - Delete or relocate `docs/TechnicalArchitecture.docx` (describes a different product)
 
 ## Changelog (newest first)
+- 2026-11-20 — S-R0-021 partly done, BLOCKED for `me()`: `@slj/api-client` with `health()` and `config()`; `me()` still to add after S-R0-014 (`c72763466e`)
 - 2026-11-20 — S-R0-020 done: i18n scaffolding (English), locale-aware formatters (`e68c439b6d`)
 - 2026-11-20 — S-R0-019 done: Field and Input primitives with accessible labels, hints and errors (`abc7775bd3`)
 - 2026-11-20 — S-R0-018 done: Button and Tag primitives with `cn` helper (`93ce326ec1`)

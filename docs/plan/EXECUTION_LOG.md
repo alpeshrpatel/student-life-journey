@@ -373,3 +373,24 @@ The "PR: pending" part is replaced by the pull request link when the PR is opene
 - **Deviations:** (1) `lng` is `"en"` (the story's `navigator.language.startsWith("en") ? "en" : "en"` always gives `en`). (2) Added key `a11y.required` and switched `Field`'s hidden "required" word to it (replacing the S-R0-019 constant). (3) Greeting boundaries 5, 12 and 18 follow the prototype's `greetingForHour`. (4) `placeholder.home` is "Student Life Journey" and the not-found text changed to "We can't find that page.", so `router.test.tsx` was updated. (5) The error sentences and nav labels are the executor's wording in the tone-of-voice style (the story gives only two examples); the planner or founder may want to review the copy in `errors.json`.
 - **Follow-ups for the founder:** Review the wording of `apps/web/src/i18n/locales/en/errors.json` (nine of the eleven sentences were written by the executor).
 
+### S-R0-021 — Create typed API client package
+- **Result:** BLOCKED (partial: `health()` and `config()` delivered; `me()` waits for S-R0-014)
+- **When:** 2026-11-20T21:56Z · **Tier / size:** 2 / S · **Branch:** `exec/batch-01-r0`
+- **Code commit:** `c72763466e` — `feat(client): create typed API client package (S-R0-021)`
+- **Size of change:** 11 files changed, 345 insertions(+)
+- **What changed:**
+  - New package `@slj/api-client`: `createApiClient` with the generic `request()` (credentials, `Accept`, `X-Client-Version`, auth headers, `Idempotency-Key`, JSON body, abort signal), `ApiClientError` (`NETWORK`, `INVALID_RESPONSE` and every `ErrorCode`), and the typed methods `health()` and `config()`.
+  - `apps/web/src/lib/api.ts` creates the shared `api` client; `VITE_API_BASE_URL` typed in `vite-env.d.ts`; `@slj/api-client` added to `@slj/web`.
+  - 12 tests with a fake `fetch`.
+- **Verification:**
+  | Command | Result |
+  |---|---|
+  | `pnpm test` | domain 18, contracts 7, api-client 12, web 107, api 48 passed |
+  | `pnpm typecheck / lint / format:check / build` | exit 0 |
+  | `secret scan on staged diff` | clean |
+- **Acceptance criteria:** AC1 PASS — `health()` returns the parsed body and sends `X-Client-Version` · AC2 PASS — 404 envelope gives `NOT_FOUND` with `requestId` · AC3 PASS — thrown `TypeError` gives `NETWORK`, status 0 · AC4 PASS — mismatching 200 body gives `INVALID_RESPONSE`
+- **Deviations:** `me()` is not implemented because `packages/contracts/src/me.ts` does not exist yet (created by S-R0-014, which waits on S-R0-013 and the human story S-R0-011). Story section 9 says to deliver `health()` only and mark the story BLOCKED for the missing methods; `config()` was also delivered because `config.ts` exists since S-R0-007. No schema was redefined locally.
+- **Follow-ups for the founder:** none for the founder; the executor must add `me()` to `packages/api-client/src/client.ts` once S-R0-014 is done, then run `python3 docs/plan/tools/tracker.py set S-R0-021 DONE --commit <hash>`.
+- **Why blocked:** `MeResponse` contract (`packages/contracts/src/me.ts`) is missing.
+- **Needed to unblock:** finish S-R0-011 (human), then S-R0-013 and S-R0-014; then add `me(): Promise<MeResponse>` using `MeResponseSchema` on `GET /api/v1/me` and a test, and mark S-R0-021 DONE. S-R0-022 depends on this story.
+

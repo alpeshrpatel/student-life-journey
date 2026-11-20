@@ -604,7 +604,7 @@ Columns: story · title · executor tier (`1`, `2`, `3`, `HUMAN`) · size · dep
 | S-R0-018 | Build Button and Tag primitives | 1 | S | S-R0-017 | DONE | 93ce326ec1 | — |
 | S-R0-019 | Build Field and Input primitives | 1 | S | S-R0-017 | DONE | abc7775bd3 | — |
 | S-R0-020 | Add i18n scaffolding | 1 | S | S-R0-016 | DONE | e68c439b6d | — |
-| S-R0-021 | Create typed API client package | 2 | S | S-R0-005, S-R0-016 | TODO | — | — |
+| S-R0-021 | Create typed API client package | 2 | S | S-R0-005, S-R0-016 | BLOCKED | c72763466e | — |
 | S-R0-022 | Add session provider and route guards | 2 | S | S-R0-014, S-R0-021 | TODO | — | — |
 | S-R0-023 | Build sign-in screen | 1 | S | S-R0-018, S-R0-020, S-R0-022 | TODO | — | — |
 | S-R0-024 | Add relocation profile table and repository | 2 | M | S-R0-012 | TODO | — | — |
