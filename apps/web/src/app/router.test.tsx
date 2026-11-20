@@ -17,6 +17,6 @@ describe("router", () => {
 
   it("AC3: renders the not-found placeholder for an unknown path", () => {
     renderAt("/no/such/screen");
-    expect(screen.getByRole("heading", { name: "Page not found" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "We can't find that page." })).toBeInTheDocument();
   });
 });

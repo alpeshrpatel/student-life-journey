@@ -4,6 +4,7 @@ import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router/dom";
 import { Providers } from "./app/providers.js";
 import { router } from "./app/router.js";
+import "./i18n/index.js";
 import "./styles/app.css";
 
 const container = document.getElementById("root");

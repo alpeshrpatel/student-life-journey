@@ -1,8 +1,6 @@
 import { TriangleAlert } from "lucide-react";
 import type { ReactNode } from "react";
-
-// Temporary English; the real string arrives with i18n (S-R0-020).
-const REQUIRED_WORD = "required";
+import { useTranslation } from "react-i18next";
 
 export interface FieldProps {
   label: string;
@@ -26,11 +24,12 @@ export function fieldDescribedBy(
 }
 
 export function Field({ label, htmlFor, hint, error, required = false, children }: FieldProps) {
+  const { t } = useTranslation();
   return (
     <div className="flex flex-col gap-1">
       <label htmlFor={htmlFor} className="text-meta text-ink-secondary">
         {label}
-        {required ? <span className="sr-only"> {REQUIRED_WORD}</span> : null}
+        {required ? <span className="sr-only"> {t("a11y.required")}</span> : null}
       </label>
       {children}
       {hint !== undefined && hint !== "" ? (
