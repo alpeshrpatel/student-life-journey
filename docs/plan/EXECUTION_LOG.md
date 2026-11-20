@@ -353,3 +353,23 @@ The "PR: pending" part is replaced by the pull request link when the PR is opene
 - **Deviations:** The `required` word is a module constant (`REQUIRED_WORD`) so `react/jsx-no-literals` passes without a disable; it moves to i18n in S-R0-020. Number-spinner hiding uses Tailwind arbitrary variants in the component because `styles/**` must not be touched. `fieldDescribedBy` options accept `undefined` explicitly (needed with `exactOptionalPropertyTypes`).
 - **Follow-ups for the founder:** none
 
+### S-R0-020 — Add i18n scaffolding
+- **Result:** DONE
+- **When:** 2026-11-20T21:55Z · **Tier / size:** 1 / S · **Branch:** `exec/batch-01-r0`
+- **Code commit:** `e68c439b6d` — `feat(web): add i18n scaffolding (S-R0-020)`
+- **Size of change:** 13 files changed, 312 insertions(+), 13 deletions(-)
+- **What changed:**
+  - i18next + react-i18next set up in `src/i18n/index.ts` with English `common.json` and `errors.json` (one sentence per `ErrorCode`); imported in `main.tsx` and the test setup.
+  - `lib/format.ts`: `formatMoney`, `formatDate`, `formatDistance`, `greetingKey`, `firstName`.
+  - Placeholder screen and `Field` now take their text from `t()`; `@slj/contracts` added as a dependency of `@slj/web`.
+- **Verification:**
+  | Command | Result |
+  |---|---|
+  | `pnpm test` | domain 18, contracts 7, web 107, api 48 passed |
+  | `format tests under TZ=UTC, America/Los_Angeles, Pacific/Kiritimati, Asia/Kolkata` | 19 passed each |
+  | `pnpm typecheck / lint / format:check / build` | exit 0 |
+  | `secret scan on staged diff` | clean |
+- **Acceptance criteria:** AC1 PASS — placeholder text comes from `common.json`, and `react/jsx-no-literals` passes for all of `apps/web/src` · AC2 PASS — `$1,250`, `$949.50`, `￥1,200` · AC3 PASS — `Mon, Nov 16` in four time zones · AC4 PASS — test iterates `ErrorCodeSchema.options`
+- **Deviations:** (1) `lng` is `"en"` (the story's `navigator.language.startsWith("en") ? "en" : "en"` always gives `en`). (2) Added key `a11y.required` and switched `Field`'s hidden "required" word to it (replacing the S-R0-019 constant). (3) Greeting boundaries 5, 12 and 18 follow the prototype's `greetingForHour`. (4) `placeholder.home` is "Student Life Journey" and the not-found text changed to "We can't find that page.", so `router.test.tsx` was updated. (5) The error sentences and nav labels are the executor's wording in the tone-of-voice style (the story gives only two examples); the planner or founder may want to review the copy in `errors.json`.
+- **Follow-ups for the founder:** Review the wording of `apps/web/src/i18n/locales/en/errors.json` (nine of the eleven sentences were written by the executor).
+
