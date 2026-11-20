@@ -1,5 +1,6 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
-import { buildContainer, type Container } from "./composition/container.js";
+import { buildContainer } from "./composition/container.js";
+import type { AppBindings } from "./http/bindings.js";
 import { toErrorResponse } from "./http/middleware/error-handler.js";
 import { requestId } from "./http/middleware/request-id.js";
 import { createRequestLogger } from "./http/middleware/request-logger.js";
@@ -9,10 +10,7 @@ import { registerHealthRoutes } from "./http/routes/health.js";
 import { NotFoundError } from "./shared/errors.js";
 import { consoleLogger, type Logger } from "./shared/logger.js";
 
-export interface AppBindings {
-  Bindings: Env;
-  Variables: { requestId: string; container: Container };
-}
+export type { AppBindings };
 
 export function buildApp(logger: Logger = consoleLogger): OpenAPIHono<AppBindings> {
   const app = new OpenAPIHono<AppBindings>({ defaultHook: validationHook });

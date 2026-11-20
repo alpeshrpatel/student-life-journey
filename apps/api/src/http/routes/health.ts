@@ -1,7 +1,7 @@
 import { createRoute, type OpenAPIHono } from "@hono/zod-openapi";
 import { HealthResponseSchema } from "@slj/contracts";
 import pkg from "../../../package.json";
-import type { AppBindings } from "../../app.js";
+import type { AppBindings } from "../bindings.js";
 
 const healthRoute = createRoute({
   method: "get",

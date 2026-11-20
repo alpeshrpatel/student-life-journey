@@ -1,6 +1,6 @@
 import { createRoute, type OpenAPIHono } from "@hono/zod-openapi";
 import { ConfigResponseSchema } from "@slj/contracts";
-import type { AppBindings } from "../../app.js";
+import type { AppBindings } from "../bindings.js";
 import { parseEnv } from "../../config/env.js";
 
 const configRoute = createRoute({

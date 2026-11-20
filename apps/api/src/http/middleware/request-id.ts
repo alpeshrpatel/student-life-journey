@@ -1,5 +1,5 @@
 import type { MiddlewareHandler } from "hono";
-import type { AppBindings } from "../../app.js";
+import type { AppBindings } from "../bindings.js";
 import { toErrorResponse } from "./error-handler.js";
 
 /** Uses the `cf-ray` header when present, else a random UUID; echoes it as `x-request-id`. */

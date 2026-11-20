@@ -1,6 +1,6 @@
 import { env } from "cloudflare:workers";
 import type { OpenAPIHono } from "@hono/zod-openapi";
-import type { AppBindings } from "../../src/app.js";
+import type { AppBindings } from "../../src/http/bindings.js";
 
 const executionContext = {
   waitUntil: (): void => undefined,

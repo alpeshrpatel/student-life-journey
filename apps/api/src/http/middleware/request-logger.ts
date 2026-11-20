@@ -1,5 +1,5 @@
 import type { MiddlewareHandler } from "hono";
-import type { AppBindings } from "../../app.js";
+import type { AppBindings } from "../bindings.js";
 import { consoleLogger, type LogLevel, type Logger } from "../../shared/logger.js";
 
 function levelFor(status: number): LogLevel {

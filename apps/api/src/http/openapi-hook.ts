@@ -1,5 +1,5 @@
 import type { Hook } from "@hono/zod-openapi";
-import type { AppBindings } from "../app.js";
+import type { AppBindings } from "./bindings.js";
 import { ValidationError } from "../shared/errors.js";
 
 /** On a Zod failure, throws a `ValidationError` carrying `{ issues: { path, message }[] }`. */
