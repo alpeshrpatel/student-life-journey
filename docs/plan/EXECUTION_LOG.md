@@ -249,3 +249,24 @@ The "PR: pending" part is replaced by the pull request link when the PR is opene
 - **Deviations:** (1) `buildContainer` takes Hono's `ExecutionContext` type (the generated global type is generic and did not accept it) and does not use it yet. (2) Existing tests now call the app through `req()` in `test/helpers/request.ts`, because the new container middleware needs the real `Env`. (3) `$client` is not exposed on the typed `Db`, so the batch test uses `db.batch([db.run(sql...)])`. (4) `import.meta.glob` typing declared in `test/helpers/import-meta.d.ts`. (5) `drizzle.config.ts` added to the tsconfig `include`.
 - **Follow-ups for the founder:** V-07 (flat `NNNN_name.sql` versus one folder per migration) cannot be observed with an empty schema; check it when S-R0-012 generates the first migration.
 
+### S-R0-012 — Generate Better Auth schema migration
+- **Result:** DONE
+- **When:** 2026-11-20T21:46Z · **Tier / size:** 2 / S · **Branch:** `exec/batch-01-r0`
+- **Code commit:** `3bcd997dab` — `feat(api): generate Better Auth schema migration (S-R0-012)`
+- **Size of change:** 10 files changed, 950 insertions(+), 6 deletions(-)
+- **What changed:**
+  - Added `better-auth@^1.7.23`; generated `src/infra/db/schema/auth.ts` with the Better Auth CLI (`user`, `session`, `account`, `verification`) and exported it from the schema index.
+  - Generated `migrations/0000_auth.sql` (4 `CREATE TABLE`, FK `ON DELETE cascade`, unique indexes on `user.email` and `session.token`) plus drizzle `meta/` snapshot.
+  - `test/auth-schema.test.ts` runs against the migrated test database.
+- **Verification:**
+  | Command | Result |
+  |---|---|
+  | `pnpm test` | domain 18, contracts 7, api 48 passed |
+  | `pnpm typecheck / lint / format:check / build` | exit 0 |
+  | `grep -c "CREATE TABLE" apps/api/migrations/0000_auth.sql` | 4 |
+  | `pnpm --filter @slj/api db:migrate:local` | `0000_auth.sql` applied, 10 commands executed |
+  | `secret scan on staged diff` | clean |
+- **Acceptance criteria:** AC1 PASS — four tables exist in `sqlite_master` · AC2 PASS — duplicate email fails with UNIQUE · AC3 PASS — session with a missing user fails with FOREIGN KEY · AC4 PASS — deleting a user leaves no sessions
+- **Deviations:** (1) `better-auth.cli.ts` passes `{}` instead of `{} as never` (the lint rule `no-unnecessary-type-assertion` rejects the cast; the generator output is unchanged). (2) `better-auth.cli.ts` and `drizzle.config.ts` are in the tsconfig `include`. (3) `pnpm --filter @slj/api db:generate --name auth` (pnpm 12 forwards `--` to the script, so no `--` separator). (4) The generator was run with `pnpm dlx auth@latest` (Better Auth CLI 1.7.26, downloaded from npm, executed locally) and `auth.ts` was then formatted with Prettier. (5) Test rows use unique ids because storage is isolated per test file, not per test.
+- **Follow-ups for the founder:** V-07 resolved: drizzle-kit writes flat `NNNN_name.sql` files (plus a `meta/` folder), so no `migrations_pattern` change is needed.
+
