@@ -616,7 +616,7 @@ Columns: story · title · executor tier (`1`, `2`, `3`, `HUMAN`) · size · dep
 | S-R0-030 | Build dashboard hero with priority | 2 | S | S-R0-027, S-R0-028 | TODO | — | — |
 | S-R0-031 | Add CI workflow | 2 | S | S-R0-006, S-R0-016 | DONE* | dbc97ceb18 | — |
 | S-R0-032 | Add dependency boundary checks | 2 | S | S-R0-031 | DONE | d37cd66db5 | — |
-| S-R0-033 | Add commit hooks and commit linting | 1 | XS | S-R0-003 | TODO | — | — |
+| S-R0-033 | Add commit hooks and commit linting | 1 | XS | S-R0-003 | DONE | 8ca1e1d674 | — |
 | S-R0-034 | Add Playwright smoke journey | 3 | M | S-R0-015, S-R0-029, S-R0-030 | TODO | — | — |
 | S-R0-035 | Add security headers and CSRF checks | 2 | S | S-R0-013 | TODO | — | — |
 | S-R0-036 | Create Cloudflare account and databases | HUMAN | S | — | WAITING HUMAN | — | — |

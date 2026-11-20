@@ -478,3 +478,26 @@ The "PR: pending" part is replaced by the pull request link when the PR is opene
 - **Deviations:** (1) Added `enhancedResolveOptions` (exports field, `.ts` extensions) because without it dependency-cruiser could not resolve `@slj/*` workspace packages and the package-edge rules gave false violations or would have missed real ones. (2) The `exclude` pattern also skips `.wrangler/`. (3) The existing code had one real violation (a circular type import of `AppBindings` between `app.ts` and its routes and middleware). The story forbids touching application code and says to report; the owning stories are my own earlier work, so it was fixed in a separate commit rather than weakening the rule. (4) `ai-is-portable` and `web-no-server` rules reference folders that do not exist yet (`packages/ai`).
 - **Follow-ups for the founder:** none
 
+### S-R0-033 — Add commit hooks and commit linting
+- **Result:** DONE
+- **When:** 2026-11-20T22:04Z · **Tier / size:** 1 / XS · **Branch:** `exec/batch-01-r0`
+- **Code commit:** `8ca1e1d674` — `build(repo): add commit hooks and commit linting (S-R0-033)`
+- **Size of change:** 7 files changed, 554 insertions(+), 2 deletions(-)
+- **What changed:**
+  - Husky 9 hooks: `pre-commit` runs `pnpm lint-staged` (`eslint --fix` and `prettier --write` on staged TypeScript; Prettier on json/md/css/yml); `commit-msg` runs commitlint; root `prepare` script is `husky`.
+  - `commitlint.config.js`: conventional config with the type and scope lists from the story and a custom `story-id` rule (subject must end with `(S-Rn-NNN)` or `(no-story)`).
+  - `renovate.json` gets `commitMessageSuffix: "(no-story)"`.
+- **Verification:**
+  | Command | Result |
+  |---|---|
+  | `echo "feat(api): x" | pnpm commitlint` | exit 1 (story-id) |
+  | `echo "feat(api): add thing (S-R0-033)" | pnpm commitlint` | exit 0 |
+  | `echo "chore(repo): update dependencies (no-story)" | pnpm commitlint` | exit 0 |
+  | `git commit --allow-empty -m "fix: stuff"` | rejected by the hook ("husky - commit-msg script failed"), no commit created |
+  | `staged unformatted `.ts` run through `pnpm lint-staged`` | file rewritten to `export const a = { b: 1, c: 2 };` |
+  | `pnpm lint / format:check` | exit 0 after a follow-up formatting commit |
+  | `secret scan on staged diff` | clean |
+- **Acceptance criteria:** AC1 PASS — lint-staged formatted the staged file (run directly, then unstaged and removed) · AC2 PASS — `fix: stuff` rejected by the real commit-msg hook · AC3 PASS — the `(no-story)` message passes
+- **Deviations:** Follow-up commit `deca262` (`build(repo): format commitlint config (S-R0-033)`) because Prettier flagged `commitlint.config.js`; the lint-staged globs from the story do not cover `.js` files. From this commit on every commit in this repository runs the hooks, so commits must be made with Node 24 and pnpm on `PATH` (use `mise exec -- git commit` or an activated mise).
+- **Follow-ups for the founder:** Your own commits now run the hooks: make sure `pnpm` and Node 24 are on `PATH` for git (activate mise in your shell, or a `.husky/init.sh` can be added later). Commit subjects must end with `(S-Rn-NNN)` or `(no-story)`.
+
