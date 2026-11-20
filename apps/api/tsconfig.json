@@ -1,5 +1,12 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": { "types": [] },
-  "include": ["src", "test", "vitest.config.ts", "drizzle.config.ts", "worker-configuration.d.ts"]
+  "include": [
+    "src",
+    "test",
+    "vitest.config.ts",
+    "drizzle.config.ts",
+    "better-auth.cli.ts",
+    "worker-configuration.d.ts"
+  ]
 }
