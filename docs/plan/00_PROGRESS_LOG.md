@@ -592,7 +592,7 @@ Columns: story · title · executor tier (`1`, `2`, `3`, `HUMAN`) · size · dep
 | S-R0-006 | Scaffold API Worker with health route | 2 | M | S-R0-004, S-R0-005 | DONE | b6461e98c6 | https://github.com/alpeshrpatel/student-life-journey/pull/2 |
 | S-R0-007 | Add configuration module with flags | 1 | S | S-R0-006 | DONE | 262da8479b | — |
 | S-R0-008 | Add error envelope and request IDs | 2 | S | S-R0-005, S-R0-006 | DONE | d5791fe532 | — |
-| S-R0-009 | Add structured request logging | 1 | XS | S-R0-008 | TODO | — | — |
+| S-R0-009 | Add structured request logging | 1 | XS | S-R0-008 | DONE | 1519f77ad4 | — |
 | S-R0-010 | Add D1 database with Drizzle | 2 | M | S-R0-006 | TODO | — | — |
 | S-R0-011 | Create Google OAuth web client | HUMAN | S | — | WAITING HUMAN | — | — |
 | S-R0-012 | Generate Better Auth schema migration | 2 | S | S-R0-010 | TODO | — | — |

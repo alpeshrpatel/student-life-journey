@@ -207,3 +207,23 @@ The "PR: pending" part is replaced by the pull request link when the PR is opene
 - **Deviations:** Hono hands only `Error` instances to `onError`, so the `requestId` middleware also catches thrown non-Error values and answers with the same generic 500 (the story lists this edge case). The malformed-JSON `HTTPException` (400) from the validator is mapped to `VALIDATION_FAILED` 422.
 - **Follow-ups for the founder:** none
 
+### S-R0-009 — Add structured request logging
+- **Result:** DONE
+- **When:** 2026-11-20T21:42Z · **Tier / size:** 1 / S · **Branch:** `exec/batch-01-r0`
+- **Code commit:** `1519f77ad4` — `feat(api): add structured request logging (S-R0-009)`
+- **Size of change:** 4 files changed, 193 insertions(+), 1 deletion(-)
+- **What changed:**
+  - `apps/api/src/shared/logger.ts`: `createLogger` with level threshold and the forbidden-field deny-list (adds `redacted: true`), `consoleLogger`, `createConsoleLogger`; the only file that uses `console`.
+  - `apps/api/src/http/middleware/request-logger.ts`: one JSON line per request with `route` as the matched pattern, `status`, `durationMs`; level `error` for 5xx, `warn` for 429, else `info`; query strings never logged.
+  - `buildApp(logger?)` installs the logger after `requestId`.
+- **Verification:**
+  | Command | Result |
+  |---|---|
+  | `pnpm test` | domain 18, contracts 7, api 29 passed |
+  | `pnpm typecheck / lint / format:check` | exit 0 (no-console only allowed in logger.ts) |
+  | `wrangler dev + GET /api/v1/health?token=abc` | one JSON line per request, route `/api/v1/health`, no query string |
+  | `secret scan on staged diff` | clean |
+- **Acceptance criteria:** AC1 PASS — test and dev log show one `event: request` line with status 200 and numeric `durationMs` · AC2 PASS — `email` dropped, `redacted: true` · AC3 PASS — 500 logged at level `error`
+- **Deviations:** `buildApp` takes an optional `logger` argument (default `consoleLogger`) so tests can capture lines; `requestLogger` is also exported as the default-wired middleware per the story. `durationMs` is 0 in the Workers runtime for fast requests (its clock only advances on I/O).
+- **Follow-ups for the founder:** none
+
