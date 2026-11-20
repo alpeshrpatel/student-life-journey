@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+      - name: Install
+        run: pnpm install --frozen-lockfile
+      - name: Format
+        run: pnpm format:check
+      - name: Lint
+        run: pnpm lint
+      - name: Types
+        run: pnpm typecheck
+      # Boundaries (pnpm depcruise): added by S-R0-032
+      - name: Unit and integration tests
+        run: pnpm test
+        env:
+          TEST_SUPPORT_TOKEN: ci-test-token
+      # AI evals (pnpm evals): added by S-R1-062
+      - name: Build
+        run: pnpm build
+      # Bundle budget (pnpm size): added by S-R1-091
+      # End-to-end and accessibility (Playwright): added by S-R0-034 and S-R1-090
+      - name: Audit production dependencies
+        run: pnpm audit --prod --audit-level=high
+      - name: Secret scan
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
