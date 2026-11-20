@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@fontsource-variable/archivo": "^5.3.0",
+    "@slj/api-client": "workspace:*",
     "@slj/contracts": "workspace:*",
     "@tanstack/react-query": "^5.107.1",
     "class-variance-authority": "^0.7.1",
