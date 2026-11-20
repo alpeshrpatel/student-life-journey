@@ -9,8 +9,8 @@ export type PlaceholderTitleKey = keyof typeof TITLES;
 export function PlaceholderScreen({ titleKey }: { titleKey: PlaceholderTitleKey }) {
   const title = TITLES[titleKey];
   return (
-    <main>
-      <h1>{title}</h1>
+    <main className="min-h-screen bg-ground p-6 text-ink">
+      <h1 className="border-b-2 border-rule pb-3 text-screen font-extrabold">{title}</h1>
     </main>
   );
 }

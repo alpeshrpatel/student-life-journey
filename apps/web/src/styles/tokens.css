@@ -1,0 +1,93 @@
+/* apps/web/src/styles/tokens.css — the only place design values are defined.
+   Values come from the Tide design's styles.css. Names are semantic so components work in both themes:
+   design --color-bg → ground, --color-text → ink, --color-accent-2-* → urgent-*, --color-divider → rule,
+   --color-border → control. The design's 100–900 ramps are intentionally NOT exposed as utilities. */
+@theme {
+  /* Remove Tailwind's default palette, radii and shadows so only Tide tokens exist. */
+  --color-*: initial;
+  --radius-*: initial;
+  --shadow-*: initial;
+
+  --color-ground: #f2f5f4;            /* design --color-bg */
+  --color-surface: #e6ecea;
+  --color-ink: #1d2b2a;               /* design --color-text */
+  --color-ink-secondary: #485754;     /* neutral-700 */
+  --color-ink-tertiary: #5f6f6c;      /* neutral-600; on ground only */
+  --color-accent: #226a66;
+  --color-accent-hover: #1c5a56;      /* accent-600 */
+  --color-accent-pressed: #164845;    /* accent-700 */
+  --color-on-accent: #f2f5f4;
+  --color-selected: #e3f0ee;          /* accent-100 */
+  --color-on-selected: #10373a;       /* accent-800 */
+  --color-urgent: #e0a53a;            /* accent-2-500: marker fill */
+  --color-urgent-tint: #fbf0d9;       /* accent-2-100 */
+  --color-urgent-tint-strong: #f6e0b0;/* accent-2-200 */
+  --color-on-urgent: #6a4503;         /* accent-2-800 */
+  --color-on-urgent-strong: #472d02;  /* accent-2-900 */
+  --color-urgent-edge: #8f5f06;       /* accent-2-700: bars, marker border, urgent text on ground */
+  --color-track: #d4dddb;             /* neutral-300: progress tracks */
+  --color-marker-muted: #869693;      /* neutral-500: MEDIUM / LOW markers */
+  --color-rule: color-mix(in srgb, #1d2b2a 30%, transparent);     /* design --color-divider */
+  --color-control: color-mix(in srgb, #1d2b2a 58%, transparent);  /* design --color-border */
+
+  --font-sans: "Archivo Variable", "Archivo", system-ui, sans-serif;
+
+  --text-eyebrow: 0.6875rem;   /* 11px, uppercase, 600, tracking 0.1em */
+  --text-meta: 0.75rem;        /* 12px */
+  --text-small: 0.8125rem;     /* 13px */
+  --text-control: 0.875rem;    /* 14px */
+  --text-body: 0.9375rem;      /* 15px, line-height 1.5 */
+  --text-lead: 1.0625rem;      /* 17px */
+  --text-title: 1.25rem;       /* 20px */
+  --text-figure: 1.625rem;     /* 26px, totals */
+  --text-screen: 1.875rem;     /* 30px, screen titles */
+  --text-hero: 4rem;           /* 64px, countdown on mobile */
+  --text-hero-lg: 5.5rem;      /* 88px, countdown on desktop */
+
+  --radius-sm: 2px;
+  --radius-md: 3px;
+  --radius-lg: 4px;
+
+  --shadow-sm: 0 1px 2px color-mix(in srgb, #232e2c 14%, transparent);
+  --shadow-md: 0 3px 10px color-mix(in srgb, #232e2c 16%, transparent);
+  --shadow-lg: 0 12px 32px color-mix(in srgb, #232e2c 22%, transparent);
+}
+
+:root {
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 400ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* Dark theme (S-R2-012): the same variable names are overridden at runtime. */
+[data-theme="dark"] {
+  --color-ground: #0f1817;
+  --color-surface: #182422;
+  --color-ink: #e6ecea;
+  --color-ink-secondary: #b4c0bd;
+  --color-ink-tertiary: #869693;
+  --color-accent: #6fb0a9;
+  --color-accent-hover: #a3cdc8;
+  --color-accent-pressed: #c9e2de;
+  --color-on-accent: #0b2527;
+  --color-selected: #10373a;
+  --color-on-selected: #c9e2de;
+  --color-urgent: #e0a53a;
+  --color-urgent-tint: #472d02;
+  --color-urgent-tint-strong: #6a4503;
+  --color-on-urgent: #f6e0b0;
+  --color-on-urgent-strong: #fbf0d9;
+  --color-urgent-edge: #e0a53a;
+  --color-track: #34413f;
+  --color-marker-muted: #869693;
+  --color-rule: color-mix(in srgb, #e6ecea 30%, transparent);
+  --color-control: color-mix(in srgb, #e6ecea 58%, transparent);
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-md: 0 3px 10px rgb(0 0 0 / 0.45);
+  --shadow-lg: 0 12px 32px rgb(0 0 0 / 0.55);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --duration-fast: 0ms; --duration-base: 0ms; --duration-slow: 0ms; }
+}

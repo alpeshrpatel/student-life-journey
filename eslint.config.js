@@ -110,12 +110,30 @@ export default defineConfig(
       ],
     },
   },
+  // 6b. Web: colours come from design tokens, never hex literals
+  {
+    files: ["apps/web/src/**/*.{ts,tsx}"],
+    rules: {
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector: "Literal[value=/#[0-9a-fA-F]{3,8}\\b/]",
+          message: "Use a design token utility instead of a hex colour",
+        },
+        {
+          selector: "TemplateElement[value.raw=/#[0-9a-fA-F]{3,8}\\b/]",
+          message: "Use a design token utility instead of a hex colour",
+        },
+      ],
+    },
+  },
   // 7. Tests
   {
     files: ["**/*.test.{ts,tsx}", "**/e2e/**", "**/test/**"],
     rules: {
       "react/jsx-no-literals": "off",
       "no-console": "off",
+      "no-restricted-syntax": "off",
       "@typescript-eslint/no-floating-promises": "off",
     },
   },

@@ -8,3 +8,5 @@ docs/
 .claude/
 CLAUDE.md
 PROGRESS_LOG.md
+apps/web/src/styles/tokens.css
+apps/web/src/styles/app.css
