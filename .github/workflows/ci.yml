@@ -33,7 +33,8 @@ jobs:
         run: pnpm lint
       - name: Types
         run: pnpm typecheck
-      # Boundaries (pnpm depcruise): added by S-R0-032
+      - name: Boundaries
+        run: pnpm depcruise
       - name: Unit and integration tests
         run: pnpm test
         env:
