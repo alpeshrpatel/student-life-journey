@@ -590,33 +590,33 @@ Columns: story · title · executor tier (`1`, `2`, `3`, `HUMAN`) · size · dep
 | S-R0-004 | Create domain package with date math | 1 | S | S-R0-002 | DONE | 3371d9acdb | https://github.com/alpeshrpatel/student-life-journey/pull/2 |
 | S-R0-005 | Create contracts package with error codes | 1 | S | S-R0-002 | DONE | f13f9afde0 | https://github.com/alpeshrpatel/student-life-journey/pull/2 |
 | S-R0-006 | Scaffold API Worker with health route | 2 | M | S-R0-004, S-R0-005 | DONE | b6461e98c6 | https://github.com/alpeshrpatel/student-life-journey/pull/2 |
-| S-R0-007 | Add configuration module with flags | 1 | S | S-R0-006 | DONE | 262da8479b | — |
-| S-R0-008 | Add error envelope and request IDs | 2 | S | S-R0-005, S-R0-006 | DONE | d5791fe532 | — |
-| S-R0-009 | Add structured request logging | 1 | XS | S-R0-008 | DONE | 1519f77ad4 | — |
-| S-R0-010 | Add D1 database with Drizzle | 2 | M | S-R0-006 | DONE | 7bf7320a06 | — |
+| S-R0-007 | Add configuration module with flags | 1 | S | S-R0-006 | DONE | 262da8479b | https://github.com/alpeshrpatel/student-life-journey/pull/2 |
+| S-R0-008 | Add error envelope and request IDs | 2 | S | S-R0-005, S-R0-006 | DONE | d5791fe532 | https://github.com/alpeshrpatel/student-life-journey/pull/2 |
+| S-R0-009 | Add structured request logging | 1 | XS | S-R0-008 | DONE | 1519f77ad4 | https://github.com/alpeshrpatel/student-life-journey/pull/2 |
+| S-R0-010 | Add D1 database with Drizzle | 2 | M | S-R0-006 | DONE | 7bf7320a06 | https://github.com/alpeshrpatel/student-life-journey/pull/2 |
 | S-R0-011 | Create Google OAuth web client | HUMAN | S | — | WAITING HUMAN | — | — |
-| S-R0-012 | Generate Better Auth schema migration | 2 | S | S-R0-010 | DONE | 3bcd997dab | — |
+| S-R0-012 | Generate Better Auth schema migration | 2 | S | S-R0-010 | DONE | 3bcd997dab | https://github.com/alpeshrpatel/student-life-journey/pull/2 |
 | S-R0-013 | Mount Better Auth with Google | 3 | M | S-R0-007, S-R0-011, S-R0-012 | TODO | — | — |
 | S-R0-014 | Add session guard and me endpoint | 2 | S | S-R0-008, S-R0-013 | TODO | — | — |
 | S-R0-015 | Add test-only session endpoint | 2 | S | S-R0-014 | TODO | — | — |
-| S-R0-016 | Scaffold web app with Vite | 2 | M | S-R0-003 | DONE | 6444d9ff1f | — |
-| S-R0-017 | Add Tide design tokens | 1 | S | S-R0-016 | DONE | 131b4eac71 | — |
-| S-R0-018 | Build Button and Tag primitives | 1 | S | S-R0-017 | DONE | 93ce326ec1 | — |
-| S-R0-019 | Build Field and Input primitives | 1 | S | S-R0-017 | DONE | abc7775bd3 | — |
-| S-R0-020 | Add i18n scaffolding | 1 | S | S-R0-016 | DONE | e68c439b6d | — |
+| S-R0-016 | Scaffold web app with Vite | 2 | M | S-R0-003 | DONE | 6444d9ff1f | https://github.com/alpeshrpatel/student-life-journey/pull/2 |
+| S-R0-017 | Add Tide design tokens | 1 | S | S-R0-016 | DONE | 131b4eac71 | https://github.com/alpeshrpatel/student-life-journey/pull/2 |
+| S-R0-018 | Build Button and Tag primitives | 1 | S | S-R0-017 | DONE | 93ce326ec1 | https://github.com/alpeshrpatel/student-life-journey/pull/2 |
+| S-R0-019 | Build Field and Input primitives | 1 | S | S-R0-017 | DONE | abc7775bd3 | https://github.com/alpeshrpatel/student-life-journey/pull/2 |
+| S-R0-020 | Add i18n scaffolding | 1 | S | S-R0-016 | DONE | e68c439b6d | https://github.com/alpeshrpatel/student-life-journey/pull/2 |
 | S-R0-021 | Create typed API client package | 2 | S | S-R0-005, S-R0-016 | BLOCKED | c72763466e | — |
 | S-R0-022 | Add session provider and route guards | 2 | S | S-R0-014, S-R0-021 | TODO | — | — |
 | S-R0-023 | Build sign-in screen | 1 | S | S-R0-018, S-R0-020, S-R0-022 | TODO | — | — |
-| S-R0-024 | Add relocation profile table and repository | 2 | M | S-R0-012 | DONE | 318bc24327 | — |
+| S-R0-024 | Add relocation profile table and repository | 2 | M | S-R0-012 | DONE | 318bc24327 | https://github.com/alpeshrpatel/student-life-journey/pull/2 |
 | S-R0-025 | Add onboarding endpoint | 2 | M | S-R0-004, S-R0-014, S-R0-024 | TODO | — | — |
-| S-R0-026 | Compute first priority in domain | 1 | S | S-R0-004 | DONE | 2158cf0b72 | — |
+| S-R0-026 | Compute first priority in domain | 1 | S | S-R0-004 | DONE | 2158cf0b72 | https://github.com/alpeshrpatel/student-life-journey/pull/2 |
 | S-R0-027 | Add dashboard endpoint | 2 | S | S-R0-025, S-R0-026 | TODO | — | — |
 | S-R0-028 | Build app shell with navigation | 2 | M | S-R0-018, S-R0-022 | TODO | — | — |
 | S-R0-029 | Build minimal onboarding wizard | 2 | M | S-R0-019, S-R0-022, S-R0-025 | TODO | — | — |
 | S-R0-030 | Build dashboard hero with priority | 2 | S | S-R0-027, S-R0-028 | TODO | — | — |
-| S-R0-031 | Add CI workflow | 2 | S | S-R0-006, S-R0-016 | DONE* | dbc97ceb18 | — |
-| S-R0-032 | Add dependency boundary checks | 2 | S | S-R0-031 | DONE | d37cd66db5 | — |
-| S-R0-033 | Add commit hooks and commit linting | 1 | XS | S-R0-003 | DONE | 8ca1e1d674 | — |
+| S-R0-031 | Add CI workflow | 2 | S | S-R0-006, S-R0-016 | DONE* | dbc97ceb18 | https://github.com/alpeshrpatel/student-life-journey/pull/2 |
+| S-R0-032 | Add dependency boundary checks | 2 | S | S-R0-031 | DONE | d37cd66db5 | https://github.com/alpeshrpatel/student-life-journey/pull/2 |
+| S-R0-033 | Add commit hooks and commit linting | 1 | XS | S-R0-003 | DONE | 8ca1e1d674 | https://github.com/alpeshrpatel/student-life-journey/pull/2 |
 | S-R0-034 | Add Playwright smoke journey | 3 | M | S-R0-015, S-R0-029, S-R0-030 | TODO | — | — |
 | S-R0-035 | Add security headers and CSRF checks | 2 | S | S-R0-013 | TODO | — | — |
 | S-R0-036 | Create Cloudflare account and databases | HUMAN | S | — | WAITING HUMAN | — | — |
