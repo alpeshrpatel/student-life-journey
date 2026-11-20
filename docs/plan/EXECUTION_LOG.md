@@ -315,3 +315,22 @@ The "PR: pending" part is replaced by the pull request link when the PR is opene
 - **Deviations:** (1) `tokens.css` and `app.css` are listed in `.prettierignore` so they stay byte-for-byte as pasted. (2) `tokens.test.ts` runs in the node environment (`// @vitest-environment node`) and reads the file with `fs`, because under jsdom `import.meta.url` is not a `file:` URL and `?raw` imports return an empty string. (3) The hex rule block is placed before the test-file block, which turns it off for tests (the token test legitimately contains hex strings).
 - **Follow-ups for the founder:** none
 
+### S-R0-018 — Build Button and Tag primitives
+- **Result:** DONE
+- **When:** 2026-11-20T21:52Z · **Tier / size:** 1 / S · **Branch:** `exec/batch-01-r0`
+- **Code commit:** `93ce326ec1` — `feat(web): build Button and Tag primitives (S-R0-018)`
+- **Size of change:** 8 files changed, 358 insertions(+), 1 deletion(-)
+- **What changed:**
+  - `lib/cn.ts` (`clsx` + `tailwind-merge`), extended so Tide `text-*` font-size tokens are not mistaken for colours.
+  - `ui/button.tsx`: variants primary/secondary/ghost/icon, sizes md (44 px) and lg (48 px), `block`, `loading` + `loadingLabel` (keeps width, spinner), icon slots (`aria-hidden`), `type="button"` default; `variant="icon"` requires `aria-label` at type level.
+  - `ui/tag.tsx`: tones accent, urgent, neutral, outline with token classes. Tests for both.
+- **Verification:**
+  | Command | Result |
+  |---|---|
+  | `pnpm test` | domain 18, contracts 7, web 71, api 48 passed |
+  | `pnpm typecheck / lint / format:check / build` | exit 0 |
+  | `secret scan on staged diff` | clean |
+- **Acceptance criteria:** AC1 PASS — `block` test (type=button, `w-full justify-start text-start`) · AC2 PASS — loading test (disabled, `aria-disabled`, name equals `loadingLabel`) · AC3 PASS — disabled click test, `onClick` not called · AC4 PASS — tone class tests and a source scan that finds no hex colour
+- **Deviations:** `cn` uses `extendTailwindMerge` (not plain `twMerge`) because plain `twMerge` dropped `text-eyebrow` and `text-control` when combined with a text colour; covered by `lib/cn.test.ts`. While loading, the label is hidden with `invisible` and `aria-hidden` so the accessible name is `loadingLabel`. `Loader2` is called `LoaderCircle` in the installed `lucide-react`.
+- **Follow-ups for the founder:** none
+
