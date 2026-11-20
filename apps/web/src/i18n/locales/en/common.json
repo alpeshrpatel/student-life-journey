@@ -1,0 +1,33 @@
+{
+  "app": {
+    "name": "Student Life Journey",
+    "tagline": "Know what to do next."
+  },
+  "nav": {
+    "home": "Home",
+    "plan": "Plan",
+    "tasks": "Tasks",
+    "housing": "Housing",
+    "places": "Places",
+    "concierge": "Concierge",
+    "chat": "Chat",
+    "settings": "Settings"
+  },
+  "placeholder": {
+    "home": "Student Life Journey",
+    "notFound": "We can't find that page."
+  },
+  "actions": {
+    "retry": "Try again",
+    "goHome": "Go to Home"
+  },
+  "greeting": {
+    "upLate": "Up late",
+    "morning": "Good morning",
+    "afternoon": "Good afternoon",
+    "evening": "Good evening"
+  },
+  "a11y": {
+    "required": "required"
+  }
+}

@@ -1,0 +1,43 @@
+[tools]
+node = "24.22.3"
+pnpm = "12.18.0"
+
+[tasks.setup]
+description = "Install Node, pnpm and dependencies"
+run = "pnpm install"
+
+[tasks.dev]
+description = "Run the API Worker locally on http://localhost:8787"
+run = "pnpm --filter @slj/api dev"
+
+[tasks.test]
+description = "Run all unit tests"
+run = "pnpm test"
+
+[tasks.typecheck]
+description = "Typecheck all packages"
+run = "pnpm typecheck"
+
+[tasks.lint]
+description = "Lint with ESLint"
+run = "pnpm lint"
+
+[tasks.format]
+description = "Format files with Prettier"
+run = "pnpm format"
+
+[tasks."format:check"]
+description = "Check formatting without changing files"
+run = "pnpm format:check"
+
+[tasks.build]
+description = "Dry-run build of the API Worker (nothing is deployed)"
+run = "pnpm --filter @slj/api build"
+
+[tasks.check]
+description = "Run every gate: lint, format check, typecheck, test, build"
+depends = ["lint", "format:check", "typecheck", "test", "build"]
+
+[tasks."dev:web"]
+description = "Run the web app (Vite) on http://localhost:5173, proxying /api to the API"
+run = "pnpm --filter @slj/web dev"

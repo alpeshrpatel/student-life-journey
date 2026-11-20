@@ -1,0 +1,22 @@
+CREATE TABLE `relocation_profile` (
+	`user_id` text PRIMARY KEY NOT NULL,
+	`origin` text NOT NULL,
+	`destination` text NOT NULL,
+	`destination_country_code` text,
+	`destination_lat` real,
+	`destination_lng` real,
+	`destination_tz` text,
+	`arrival_date` text NOT NULL,
+	`arrival_time` text,
+	`monthly_budget_minor` integer,
+	`housing_status` text NOT NULL,
+	`housing_budget_minor` integer,
+	`transport_prefs` text NOT NULL,
+	`home_label` text,
+	`home_lat` real,
+	`home_lng` real,
+	`onboarding_completed_at` integer,
+	`created_at` integer NOT NULL,
+	`updated_at` integer NOT NULL,
+	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
+);

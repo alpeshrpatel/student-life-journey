@@ -1,0 +1,38 @@
+# Copy to `.dev.vars` (git-ignored) for local development. Names follow ADR-0024.
+# Empty values mean "not set". Dev and test environments fall back to safe defaults.
+
+# Signs sessions. At least 32 random characters in preview and production. (S-R0-013)
+BETTER_AUTH_SECRET=
+# Google OAuth web client from S-R0-011. Required in preview and production. (S-R0-013)
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+# Enables the test-support routes. Local and CI only; forbidden in preview and production. (S-R0-015)
+TEST_SUPPORT_TOKEN=
+# Error reporting DSN. Optional. (S-R0-040)
+SENTRY_DSN=
+# Places provider key. Optional; a demo provider is used without it. (S-R1-027)
+GEOAPIFY_API_KEY=
+# Workers AI credentials. Optional; the heuristic provider is used without them. (S-R1-061)
+CLOUDFLARE_ACCOUNT_ID=
+WORKERS_AI_API_TOKEN=
+# Optional paid AI providers. (S-R1-094)
+OPENAI_API_KEY=
+GEMINI_API_KEY=
+# Hashing key for analytics identifiers. (S-R1-084)
+ANALYTICS_SALT=
+# Optional analytics key. (S-R1-084)
+POSTHOG_API_KEY=
+# Transactional email. (S-R2-031)
+RESEND_API_KEY=
+# Web push private key. (S-R2-038)
+VAPID_PRIVATE_KEY=
+# Sign in with Apple. (S-R2-047)
+APPLE_CLIENT_ID=
+APPLE_TEAM_ID=
+APPLE_KEY_ID=
+APPLE_PRIVATE_KEY=
+APPLE_APP_BUNDLE_IDENTIFIER=
+# Firebase Cloud Messaging service account JSON. (S-R2-052)
+FCM_SERVICE_ACCOUNT_JSON=
+# Optional Anthropic provider. (S-R3-022)
+ANTHROPIC_API_KEY=

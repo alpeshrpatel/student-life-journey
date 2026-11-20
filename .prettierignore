@@ -1,0 +1,12 @@
+legacy/
+pnpm-lock.yaml
+dist/
+coverage/
+apps/api/worker-configuration.d.ts
+apps/api/migrations/
+docs/
+.claude/
+CLAUDE.md
+PROGRESS_LOG.md
+apps/web/src/styles/tokens.css
+apps/web/src/styles/app.css

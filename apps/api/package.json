@@ -1,0 +1,33 @@
+{
+  "name": "@slj/api",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "scripts": {
+    "predev": "node scripts/ensure-assets-dir.mjs",
+    "dev": "wrangler dev",
+    "prebuild": "node scripts/ensure-assets-dir.mjs",
+    "build": "wrangler deploy --dry-run --outdir dist",
+    "typecheck": "tsc --noEmit",
+    "pretest": "node scripts/ensure-assets-dir.mjs",
+    "test": "vitest run",
+    "types": "wrangler types",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate:local": "wrangler d1 migrations apply slj-local --local"
+  },
+  "dependencies": {
+    "@hono/zod-openapi": "^1.6.3",
+    "@slj/contracts": "workspace:*",
+    "@slj/domain": "workspace:*",
+    "better-auth": "^1.7.23",
+    "drizzle-orm": "^0.45.4",
+    "hono": "^4.13.18",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-plugin": "^1.8.2",
+    "drizzle-kit": "^0.31.11",
+    "vitest": "^4.1.12",
+    "wrangler": "^4.162.0"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "VALIDATION_FAILED": "Some of that doesn't look right. Check the fields and try again.",
+  "UNAUTHENTICATED": "Sign in to continue.",
+  "FORBIDDEN": "You don't have access to that.",
+  "NOT_FOUND": "We can't find that.",
+  "ONBOARDING_REQUIRED": "Finish setting up your move first.",
+  "CONFLICT": "That changed while you were working. Refresh and try again.",
+  "IDEMPOTENCY_CONFLICT": "We already have a different request with this reference. Try again.",
+  "RATE_LIMITED": "You've reached today's limit. It resets tomorrow.",
+  "UNSUPPORTED_CLIENT": "This version of the app is out of date. Update it to continue.",
+  "UPSTREAM_UNAVAILABLE": "A service we rely on isn't responding. Try again in a minute.",
+  "INTERNAL": "Something went wrong on our side."
+}
