@@ -187,3 +187,23 @@ The "PR: pending" part is replaced by the pull request link when the PR is opene
 - **Deviations:** `.dev.vars.example` lists every secret-kind name from ADR-0024 (not the plain vars), grouped with the story that first needs it. The route passes `{ ...c.env }` to `parseEnv` so the generated `Env` interface fits `Record<string, unknown>`.
 - **Follow-ups for the founder:** none
 
+### S-R0-008 — Add error envelope and request IDs
+- **Result:** DONE
+- **When:** 2026-11-20T21:41Z · **Tier / size:** 2 / S · **Branch:** `exec/batch-01-r0`
+- **Code commit:** `d5791fe532` — `feat(api): add error envelope and request IDs (S-R0-008)`
+- **Size of change:** 6 files changed, 266 insertions(+), 2 deletions(-)
+- **What changed:**
+  - `AppError` and eight subclasses in `apps/api/src/shared/errors.ts`, mapped to `ERROR_STATUS`.
+  - `requestId` middleware (`cf-ray` or UUID, echoed as `x-request-id`), `toErrorResponse`, `onError` and `notFound` returning the contract envelope; unexpected errors become a generic 500 `INTERNAL`.
+  - `validationHook` as `defaultHook` so Zod failures and malformed JSON return 422 `VALIDATION_FAILED` with `details.issues` as `{ path, message }`.
+- **Verification:**
+  | Command | Result |
+  |---|---|
+  | `pnpm test` | domain 18, contracts 7, api 22 passed |
+  | `pnpm typecheck / lint / format:check` | exit 0 |
+  | `curl -si localhost:8787/api/v1/nope (wrangler dev)` | `x-request-id` header and NOT_FOUND envelope with the same requestId |
+  | `secret scan on staged diff` | clean |
+- **Acceptance criteria:** AC1 PASS — NotFoundError test (404, `Task not found`, requestId equals header) · AC2 PASS — generic 500, body lacks `secret detail` · AC3 PASS — unknown path parses with `ErrorEnvelopeSchema` · AC4 PASS — invalid body gives 422 with `issues[0].path = arrivalDate`
+- **Deviations:** Hono hands only `Error` instances to `onError`, so the `requestId` middleware also catches thrown non-Error values and answers with the same generic 500 (the story lists this edge case). The malformed-JSON `HTTPException` (400) from the validator is mapped to `VALIDATION_FAILED` 422.
+- **Follow-ups for the founder:** none
+
