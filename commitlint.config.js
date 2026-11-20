@@ -7,7 +7,10 @@ export default {
       rules: {
         "story-id": ({ header }) => {
           const ok = typeof header === "string" && STORY_ID.test(header.trim());
-          return [ok, "the subject must end with a story ID, for example (S-R0-001), or (no-story)"];
+          return [
+            ok,
+            "the subject must end with a story ID, for example (S-R0-001), or (no-story)",
+          ];
         },
       },
     },
