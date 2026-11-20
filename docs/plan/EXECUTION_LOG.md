@@ -18,6 +18,7 @@ When you finish one: tick the box, and for a HUMAN-tier story run `python3 docs/
 - [ ] S-R0-011 — Create Google OAuth web client — read docs/plan/stories/R0/S-R0-011-create-google-oauth-web-client.md — unblocks: S-R0-013
 - [ ] S-R0-036 — Create Cloudflare account and databases — read docs/plan/stories/R0/S-R0-036-create-cloudflare-account-and-databases.md — unblocks: S-R0-037
 - [ ] S-R0-039 — Create Sentry project — read docs/plan/stories/R0/S-R0-039-create-sentry-project.md — unblocks: S-R0-040
+- [ ] S-R0-031 (step 3) — In GitHub: protect `main`, require the `verify` check; replace `FOUNDER_GITHUB_HANDLE` in `.github/CODEOWNERS` with your GitHub username — unblocks: nothing (safety gate for merges)
 
 ## Plan issues found
 
@@ -434,4 +435,23 @@ The "PR: pending" part is replaced by the pull request link when the PR is opene
 - **Acceptance criteria:** AC1 PASS — `SEARCHING`, 12, "Phoenix" gives `housing.find`, CRITICAL, reason contains "Phoenix" and "12 days" · AC2 PASS — 14 days gives `arrival.airport_transport`, 15 gives `housing.confirm_move_in` · AC3 PASS — −3 gives `places.find_essentials` · AC4 PASS — 1 day reads "1 day", not "1 days"
 - **Deviations:** none
 - **Follow-ups for the founder:** none
+
+### S-R0-031 — Add CI workflow
+- **Result:** DONE*
+- **When:** 2026-11-20T22:01Z · **Tier / size:** 2 / S · **Branch:** `exec/batch-01-r0`
+- **Code commit:** `dbc97ceb18` — `ci(repo): add CI workflow (S-R0-031)`
+- **Size of change:** 3 files changed, 72 insertions(+)
+- **What changed:**
+  - `.github/workflows/ci.yml`: job `verify` on `ubuntu-latest` (checkout with full history, pnpm from `packageManager`, Node from `.node-version`): install (frozen), format, lint, typecheck, test (with `TEST_SUPPORT_TOKEN=ci-test-token`), build, `pnpm audit --prod --audit-level=high`, gitleaks; one comment line per stage added later (S-R0-032, S-R1-062, S-R1-091, S-R0-034 and S-R1-090).
+  - `.github/pull_request_template.md` (Story, What changed, How verified, the five Definition-of-Done lines) and `.github/CODEOWNERS` with a placeholder handle.
+- **Verification:**
+  | Command | Result |
+  |---|---|
+  | `gh pr checks 2 (PR #2, after pushing the branch)` | `verify` pass in 1m5s |
+  | `pnpm audit --prod --audit-level=high (local)` | No known vulnerabilities found |
+  | `prettier --check .github` | pass |
+  | `secret scan on staged diff` | clean |
+- **Acceptance criteria:** AC1 PASS — the `verify` job ran every step on PR #2 and passed (workflow also contains the audit and gitleaks steps) · AC2 NOT RUNNABLE LOCALLY — needs a throwaway branch with a failing commit that is then deleted, and branch deletion is not allowed for the executor (the same failure is shown locally by `pnpm lint` on `any`, see S-R0-003) · AC3 NOT RUNNABLE LOCALLY — same reason (a fake `sk-` fixture on a throwaway branch); `gitleaks` is not installed locally
+- **Deviations:** `CODEOWNERS` contains the placeholder `@FOUNDER_GITHUB_HANDLE` because the founder's GitHub handle is not known (story section 9). The repository owner is not necessarily the founder, so no handle was guessed.
+- **Follow-ups for the founder:** HUMAN: replace the placeholder in `.github/CODEOWNERS`; protect `main` and require the `verify` check (executor has no admin rights); optionally run AC2 and AC3 on a throwaway branch.
 
