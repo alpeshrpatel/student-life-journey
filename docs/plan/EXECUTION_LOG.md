@@ -270,3 +270,26 @@ The "PR: pending" part is replaced by the pull request link when the PR is opene
 - **Deviations:** (1) `better-auth.cli.ts` passes `{}` instead of `{} as never` (the lint rule `no-unnecessary-type-assertion` rejects the cast; the generator output is unchanged). (2) `better-auth.cli.ts` and `drizzle.config.ts` are in the tsconfig `include`. (3) `pnpm --filter @slj/api db:generate --name auth` (pnpm 12 forwards `--` to the script, so no `--` separator). (4) The generator was run with `pnpm dlx auth@latest` (Better Auth CLI 1.7.26, downloaded from npm, executed locally) and `auth.ts` was then formatted with Prettier. (5) Test rows use unique ids because storage is isolated per test file, not per test.
 - **Follow-ups for the founder:** V-07 resolved: drizzle-kit writes flat `NNNN_name.sql` files (plus a `meta/` folder), so no `migrations_pattern` change is needed.
 
+### S-R0-016 — Scaffold web app with Vite
+- **Result:** DONE
+- **When:** 2026-11-20T21:48Z · **Tier / size:** 2 / M · **Branch:** `exec/batch-01-r0`
+- **Code commit:** `6444d9ff1f` — `feat(web): scaffold web app with Vite (S-R0-016)`
+- **Size of change:** 17 files changed, 1170 insertions(+), 54 deletions(-)
+- **What changed:**
+  - New package `@slj/web`: Vite 8 + React 19, React Router 8 (`routes`, `router`), TanStack Query provider, Tailwind 4 plugin, jsdom + Testing Library test setup, placeholder screens (`home`, `notFound`).
+  - `apps/api/wrangler.jsonc` serves `../web/dist` as an SPA (`not_found_handling: single-page-application`, `run_worker_first: ["/api/*"]`, binding `ASSETS`).
+  - `apps/api/scripts/ensure-assets-dir.mjs` plus `predev`, `pretest`, `prebuild` hooks create a stub `index.html` when the web app is not built.
+- **Verification:**
+  | Command | Result |
+  |---|---|
+  | `pnpm test` | domain 18, contracts 7, web 2, api 48 passed |
+  | `pnpm typecheck / lint / format:check / build` | exit 0 (root build runs web build then API dry-run) |
+  | `pnpm --filter @slj/api test with no apps/web/dist` | 48 passed; stub dist created |
+  | `wrangler dev: curl /some/deep/link` | 1 match of `<div id="root">` |
+  | `wrangler dev: curl /api/v1/health and /api/v1/nope` | JSON health; 404 envelope |
+  | `vite dev: curl localhost:5173/ and /api/v1/health` | page served; health reached through the proxy |
+  | `secret scan on staged diff` | clean |
+- **Acceptance criteria:** AC1 PASS — Vite serves the placeholder on 5173 and the proxy reaches `/api/v1/health` (curl; no browser opened) · AC2 PASS — Worker returns `index.html` for `/some/deep/link`, JSON for `/api/v1/health` · AC3 PASS — router test renders the not-found placeholder · AC4 PASS — API tests pass with `apps/web/dist` absent
+- **Deviations:** Versions for packages the story gives only as a name were resolved to the current majors (`jsdom` ^27, `@testing-library/jest-dom` ^6, `@testing-library/user-event` ^14, `@types/react` and `@types/react-dom` ^19). `router.tsx` also exports `routes` so the test can use `createMemoryRouter`. The placeholder maps `titleKey` to temporary English text; no eslint-disable was needed. The placeholder was checked by HTTP and tests only; no real browser was opened.
+- **Follow-ups for the founder:** The `mise run dev` task starts only the API; run `pnpm --filter @slj/web dev` in a second terminal for the web app (or use root `pnpm dev`).
+

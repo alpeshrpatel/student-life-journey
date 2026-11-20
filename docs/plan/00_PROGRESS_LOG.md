@@ -599,7 +599,7 @@ Columns: story · title · executor tier (`1`, `2`, `3`, `HUMAN`) · size · dep
 | S-R0-013 | Mount Better Auth with Google | 3 | M | S-R0-007, S-R0-011, S-R0-012 | TODO | — | — |
 | S-R0-014 | Add session guard and me endpoint | 2 | S | S-R0-008, S-R0-013 | TODO | — | — |
 | S-R0-015 | Add test-only session endpoint | 2 | S | S-R0-014 | TODO | — | — |
-| S-R0-016 | Scaffold web app with Vite | 2 | M | S-R0-003 | TODO | — | — |
+| S-R0-016 | Scaffold web app with Vite | 2 | M | S-R0-003 | DONE | 6444d9ff1f | — |
 | S-R0-017 | Add Tide design tokens | 1 | S | S-R0-016 | TODO | — | — |
 | S-R0-018 | Build Button and Tag primitives | 1 | S | S-R0-017 | TODO | — | — |
 | S-R0-019 | Build Field and Input primitives | 1 | S | S-R0-017 | TODO | — | — |
