@@ -47,6 +47,7 @@
 
 **Session notes**
 - 2026-11-15: resumed at S-R2-041. Section 1 rows for files 11, 13, 14, 15 and the story batches added below.
+- 2026-11-15 (later): executor hand-over built (`EXECUTOR_PROMPT.md`, `EXECUTION_LOG.md`, `tools/tracker.py`, `.claude/commands/run-stories.md`; tracker = Section 5). Story writing is paused at S-R3-033: 17 stories remain to write (S-R3-033 to S-R3-040, S-R4-001 to S-R4-009). After writing them run `python3 docs/plan/tools/tracker.py sync` so the tracker picks up their tier and dependencies, then continue with the backlog index, the review checklist, the final report and the board.
 - 2026-11-15: R2 finished. V-42 added to `13_ASSUMPTIONS_RISKS.md`. S-R3-022 specifies the official `@anthropic-ai/sdk` inside the adapter file (model rules for `claude-haiku-5-5` and `claude-sonnet-5-5`: no sampling parameters, no forced tool choice, structured outputs through `output_config.format`). Deviations from the manifest's dependency lists are deliberate and listed for the final report: S-R2-051 also depends on S-R2-048; S-R2-062 also on 039 and 060; S-R3-016 also on 011, 021, 025, 029; S-R2-043 uses `dist-native` as `webDir`.
 
 ---
@@ -108,6 +109,7 @@
 | 51 | Section 9 review checklist and consistency sweep | TODO | Results go into `99_FINAL_REPORT.md` |
 | 52 | `99_FINAL_REPORT.md` | TODO | Must note that `docs/BOARD.md` was edited under PLAN_ONLY |
 | 53 | `docs/BOARD.md` full update | TODO | — |
+| 54 | `EXECUTOR_PROMPT.md`, `EXECUTION_LOG.md`, `tools/tracker.py`, `.claude/commands/run-stories.md` | DONE | Hand-over to the executor agent. Tracker is Section 5 below; the planner's Section 0 is only for finishing the story files |
 
 (Rows are appended as each file is completed.)
 
@@ -560,3 +562,278 @@ Counts: R0 47 · R1 95 · R2 62 · R3 40 · R4 9 · total 253. Sizes: XS under 3
 | S-R4-007 | Add activities discovery agent slice | Expansion Agents | feature | M | 3 | S-R3-039 |
 | S-R4-008 | Add routine coach agent slice | Expansion Agents | feature | M | 3 | S-R4-007 |
 | S-R4-009 | Build Tauri desktop shell | Desktop Shell | infra | M | 3 | S-R3-039 |
+
+---
+
+## 5. Execution tracker
+
+Written and updated by the executor agent through `docs/plan/tools/tracker.py` (see `docs/plan/EXECUTOR_PROMPT.md`).
+Do not edit by hand unless you are the founder marking a human chore.
+
+| Status | Meaning |
+|---|---|
+| `TODO` | Not started |
+| `IN PROGRESS` | An executor is working on it (or died while doing so: resume it) |
+| `DONE` | Every acceptance criterion was demonstrated and the story's commit exists |
+| `DONE*` | Done locally; at least one acceptance criterion needs a human, an account or a deployment (see `docs/plan/EXECUTION_LOG.md`). Counts as satisfied for dependants |
+| `WAITING HUMAN` | A person must act (HUMAN-tier story, or a human step named by the log). Founder sets `DONE` when finished |
+| `BLOCKED` | Stopped on a stop condition or a failure the executor could not resolve; reason in the log |
+
+Columns: story · title · executor tier (`1`, `2`, `3`, `HUMAN`) · size · dependencies · status · commit (short hash of the story's code commit) · PR (link of the pull request that carries it).
+
+
+| ID | Title | Tier | Size | Depends on | Status | Commit | PR |
+|---|---|---|---|---|---|---|---|
+| S-R0-001 | Archive prototype under legacy | 1 | S | — | TODO | — | — |
+| S-R0-002 | Initialise pnpm workspace root | 1 | S | S-R0-001 | TODO | — | — |
+| S-R0-003 | Add lint and format toolchain | 2 | S | S-R0-002 | TODO | — | — |
+| S-R0-004 | Create domain package with date math | 1 | S | S-R0-002 | TODO | — | — |
+| S-R0-005 | Create contracts package with error codes | 1 | S | S-R0-002 | TODO | — | — |
+| S-R0-006 | Scaffold API Worker with health route | 2 | M | S-R0-004, S-R0-005 | TODO | — | — |
+| S-R0-007 | Add configuration module with flags | 1 | S | S-R0-006 | TODO | — | — |
+| S-R0-008 | Add error envelope and request IDs | 2 | S | S-R0-005, S-R0-006 | TODO | — | — |
+| S-R0-009 | Add structured request logging | 1 | XS | S-R0-008 | TODO | — | — |
+| S-R0-010 | Add D1 database with Drizzle | 2 | M | S-R0-006 | TODO | — | — |
+| S-R0-011 | Create Google OAuth web client | HUMAN | S | — | TODO | — | — |
+| S-R0-012 | Generate Better Auth schema migration | 2 | S | S-R0-010 | TODO | — | — |
+| S-R0-013 | Mount Better Auth with Google | 3 | M | S-R0-007, S-R0-011, S-R0-012 | TODO | — | — |
+| S-R0-014 | Add session guard and me endpoint | 2 | S | S-R0-008, S-R0-013 | TODO | — | — |
+| S-R0-015 | Add test-only session endpoint | 2 | S | S-R0-014 | TODO | — | — |
+| S-R0-016 | Scaffold web app with Vite | 2 | M | S-R0-003 | TODO | — | — |
+| S-R0-017 | Add Tide design tokens | 1 | S | S-R0-016 | TODO | — | — |
+| S-R0-018 | Build Button and Tag primitives | 1 | S | S-R0-017 | TODO | — | — |
+| S-R0-019 | Build Field and Input primitives | 1 | S | S-R0-017 | TODO | — | — |
+| S-R0-020 | Add i18n scaffolding | 1 | S | S-R0-016 | TODO | — | — |
+| S-R0-021 | Create typed API client package | 2 | S | S-R0-005, S-R0-016 | TODO | — | — |
+| S-R0-022 | Add session provider and route guards | 2 | S | S-R0-014, S-R0-021 | TODO | — | — |
+| S-R0-023 | Build sign-in screen | 1 | S | S-R0-018, S-R0-020, S-R0-022 | TODO | — | — |
+| S-R0-024 | Add relocation profile table and repository | 2 | M | S-R0-012 | TODO | — | — |
+| S-R0-025 | Add onboarding endpoint | 2 | M | S-R0-004, S-R0-014, S-R0-024 | TODO | — | — |
+| S-R0-026 | Compute first priority in domain | 1 | S | S-R0-004 | TODO | — | — |
+| S-R0-027 | Add dashboard endpoint | 2 | S | S-R0-025, S-R0-026 | TODO | — | — |
+| S-R0-028 | Build app shell with navigation | 2 | M | S-R0-018, S-R0-022 | TODO | — | — |
+| S-R0-029 | Build minimal onboarding wizard | 2 | M | S-R0-019, S-R0-022, S-R0-025 | TODO | — | — |
+| S-R0-030 | Build dashboard hero with priority | 2 | S | S-R0-027, S-R0-028 | TODO | — | — |
+| S-R0-031 | Add CI workflow | 2 | S | S-R0-006, S-R0-016 | TODO | — | — |
+| S-R0-032 | Add dependency boundary checks | 2 | S | S-R0-031 | TODO | — | — |
+| S-R0-033 | Add commit hooks and commit linting | 1 | XS | S-R0-003 | TODO | — | — |
+| S-R0-034 | Add Playwright smoke journey | 3 | M | S-R0-015, S-R0-029, S-R0-030 | TODO | — | — |
+| S-R0-035 | Add security headers and CSRF checks | 2 | S | S-R0-013 | TODO | — | — |
+| S-R0-036 | Create Cloudflare account and databases | HUMAN | S | — | TODO | — | — |
+| S-R0-037 | Configure preview and production environments | 2 | S | S-R0-010, S-R0-036 | TODO | — | — |
+| S-R0-038 | Add deploy workflow | 3 | M | S-R0-031, S-R0-037 | TODO | — | — |
+| S-R0-039 | Create Sentry project | HUMAN | XS | — | TODO | — | — |
+| S-R0-040 | Add Sentry to API and web | 2 | S | S-R0-038, S-R0-039 | TODO | — | — |
+| S-R0-041 | Write README and runbook index | 1 | S | S-R0-038 | TODO | — | — |
+| S-R0-042 | Write deploy and rollback runbook | 2 | S | S-R0-038 | TODO | — | — |
+| S-R0-043 | Measure Worker CPU for streaming | 3 | M | S-R0-038 | TODO | — | — |
+| S-R0-044 | Prove Capacitor Google sign-in | 3 | M | S-R0-013, S-R0-038 | TODO | — | — |
+| S-R0-045 | Verify production walking skeleton | HUMAN | S | S-R0-034, S-R0-035, S-R0-040, S-R0-042 | TODO | — | — |
+| S-R0-046 | Mark legacy specs as superseded | 1 | XS | S-R0-041 | TODO | — | — |
+| S-R0-047 | Prove Web Push from Worker | 3 | S | S-R0-038 | TODO | — | — |
+| S-R1-001 | Add Money value object | 1 | S | S-R0-004 | TODO | — | — |
+| S-R1-002 | Port housing cost calculators | 1 | S | S-R1-001 | TODO | — | — |
+| S-R1-003 | Add affordability verdict rules | 2 | S | S-R1-002 | TODO | — | — |
+| S-R1-004 | Add listing risk checklist rules | 1 | XS | S-R1-003 | TODO | — | — |
+| S-R1-005 | Define task and plan types | 1 | S | S-R0-004 | TODO | — | — |
+| S-R1-006 | Implement journey phase state | 1 | S | S-R1-005 | TODO | — | — |
+| S-R1-007 | Implement priority specifications | 2 | M | S-R1-005, S-R1-006 | TODO | — | — |
+| S-R1-008 | Author baseline task templates | 2 | M | S-R1-005 | TODO | — | — |
+| S-R1-009 | Implement baseline plan builder | 2 | M | S-R1-006, S-R1-008 | TODO | — | — |
+| S-R1-010 | Add late-arrival plan rules | 1 | S | S-R1-009 | TODO | — | — |
+| S-R1-011 | Implement plan reconciliation | 3 | M | S-R1-009 | TODO | — | — |
+| S-R1-012 | Add task and plan tables | 2 | M | S-R1-005, S-R1-013 | TODO | — | — |
+| S-R1-013 | Add atomic batch unit of work | 2 | S | S-R0-010 | TODO | — | — |
+| S-R1-014 | Add outbox table and event bus | 2 | M | S-R1-013 | TODO | — | — |
+| S-R1-015 | Add cron outbox dispatcher | 2 | S | S-R1-014 | TODO | — | — |
+| S-R1-016 | Add idempotency middleware | 2 | S | S-R1-013 | TODO | — | — |
+| S-R1-017 | Generate baseline plan at onboarding | 2 | M | S-R1-010, S-R1-011, S-R1-012, S-R1-014 | TODO | — | — |
+| S-R1-018 | Add tasks API | 2 | M | S-R1-012, S-R1-016 | TODO | — | — |
+| S-R1-019 | Add plan API | 2 | S | S-R1-017, S-R1-018 | TODO | — | — |
+| S-R1-020 | Rank dashboard priorities | 2 | S | S-R1-007, S-R1-018 | TODO | — | — |
+| S-R1-021 | Add relocation settings endpoint | 2 | S | S-R1-017 | TODO | — | — |
+| S-R1-022 | Add profile preferences endpoint | 2 | S | S-R1-013 | TODO | — | — |
+| S-R1-023 | Add usage counters and budgets | 2 | M | S-R1-013, S-R1-018, S-R1-019 | TODO | — | — |
+| S-R1-024 | Add housing option table and API | 2 | M | S-R1-003, S-R1-004, S-R1-016, S-R1-022 | TODO | — | — |
+| S-R1-025 | Add housing evaluate endpoint | 2 | S | S-R1-003, S-R1-004, S-R1-024 | TODO | — | — |
+| S-R1-026 | Create Geoapify API key | HUMAN | XS | — | TODO | — | — |
+| S-R1-027 | Add geocoding provider with cache | 2 | M | S-R1-013, S-R1-014, S-R1-017, S-R1-023, S-R1-026 | TODO | — | — |
+| S-R1-028 | Add places provider with cache | 2 | M | S-R1-027 | TODO | — | — |
+| S-R1-029 | Add essential places endpoint | 2 | S | S-R1-028 | TODO | — | — |
+| S-R1-030 | Add saved places API | 2 | S | S-R1-029 | TODO | — | — |
+| S-R1-031 | Add destination autocomplete endpoint | 2 | S | S-R1-023, S-R1-027 | TODO | — | — |
+| S-R1-032 | Add age attestation and consent fields | 2 | S | S-R1-017, S-R1-022 | TODO | — | — |
+| S-R1-033 | Create AI package with core interfaces | 2 | S | S-R0-004, S-R0-005 | TODO | — | — |
+| S-R1-034 | Add fake provider for tests | 1 | XS | S-R1-033 | TODO | — | — |
+| S-R1-035 | Implement SSE stream parser | 2 | S | S-R1-033 | TODO | — | — |
+| S-R1-036 | Implement OpenAI-compatible adapter | 3 | M | S-R1-035 | TODO | — | — |
+| S-R1-037 | Port heuristic provider | 2 | M | S-R1-009, S-R1-033, S-R1-044 | TODO | — | — |
+| S-R1-038 | Add retry and timeout decorator | 2 | S | S-R1-034 | TODO | — | — |
+| S-R1-039 | Add circuit breaker decorator | 2 | S | S-R1-034 | TODO | — | — |
+| S-R1-040 | Add budget decorator | 2 | S | S-R1-023, S-R1-034, S-R1-036 | TODO | — | — |
+| S-R1-041 | Add tracing decorator and call log | 2 | M | S-R1-013, S-R1-023, S-R1-034, S-R1-036 | TODO | — | — |
+| S-R1-042 | Implement provider factory | 2 | S | S-R1-036, S-R1-037, S-R1-038, S-R1-039, S-R1-040, S-R1-041 | TODO | — | — |
+| S-R1-043 | Add prompt registry | 2 | S | S-R1-033 | TODO | — | — |
+| S-R1-044 | Define AI task schemas | 2 | S | S-R1-004, S-R1-005, S-R1-033 | TODO | — | — |
+| S-R1-045 | Implement context builder with redaction | 2 | M | S-R1-012, S-R1-020, S-R1-024, S-R1-033 | TODO | — | — |
+| S-R1-046 | Implement tool registry | 2 | S | S-R1-033, S-R1-045 | TODO | — | — |
+| S-R1-047 | Register core deterministic tools | 2 | M | S-R1-020, S-R1-025, S-R1-029, S-R1-046 | TODO | — | — |
+| S-R1-048 | Implement input guardrails | 2 | M | S-R1-033, S-R1-044, S-R1-045 | TODO | — | — |
+| S-R1-049 | Implement output guardrails | 3 | M | S-R1-044, S-R1-048 | TODO | — | — |
+| S-R1-050 | Implement intent router chain | 2 | M | S-R1-042, S-R1-043, S-R1-044 | TODO | — | — |
+| S-R1-051 | Implement base agent template | 2 | S | S-R1-045, S-R1-046, S-R1-048, S-R1-049 | TODO | — | — |
+| S-R1-052 | Implement planning agent | 3 | M | S-R1-043, S-R1-051 | TODO | — | — |
+| S-R1-053 | Implement housing agent | 2 | M | S-R1-043, S-R1-051, S-R1-052 | TODO | — | — |
+| S-R1-054 | Implement listing extraction | 3 | M | S-R1-043, S-R1-044, S-R1-048 | TODO | — | — |
+| S-R1-055 | Implement concierge agent | 2 | M | S-R1-043, S-R1-051, S-R1-052 | TODO | — | — |
+| S-R1-056 | Implement orchestrator | 3 | M | S-R1-050, S-R1-052, S-R1-053, S-R1-055 | TODO | — | — |
+| S-R1-057 | Add conversation tables and memory | 2 | M | S-R1-013, S-R1-033, S-R1-055 | TODO | — | — |
+| S-R1-058 | Add concierge streaming endpoint | 3 | M | S-R1-023, S-R1-047, S-R1-056, S-R1-057, S-R0-043 | TODO | — | — |
+| S-R1-059 | Wire plan enhancement handler | 2 | M | S-R1-015, S-R1-017, S-R1-052, S-R1-058 | TODO | — | — |
+| S-R1-060 | Wire housing explanation and extraction | 2 | S | S-R1-025, S-R1-053, S-R1-054, S-R1-058 | TODO | — | — |
+| S-R1-061 | Configure Workers AI provider chain | 2 | S | S-R1-042, S-R1-058 | TODO | — | — |
+| S-R1-062 | Build eval harness runner | 3 | M | S-R1-034, S-R1-054, S-R1-056 | TODO | — | — |
+| S-R1-063 | Author safety golden set | 2 | M | S-R1-062 | TODO | — | — |
+| S-R1-064 | Author quality golden set | 2 | S | S-R1-062 | TODO | — | — |
+| S-R1-065 | Add query keys and config hook | 2 | S | S-R0-022, S-R0-030 | TODO | — | — |
+| S-R1-066 | Build segmented control and chips | 1 | S | S-R0-018 | TODO | — | — |
+| S-R1-067 | Build checkbox and task row | 1 | S | S-R0-018, S-R0-020 | TODO | — | — |
+| S-R1-068 | Build toast and banner | 2 | S | S-R0-018 | TODO | — | — |
+| S-R1-069 | Build state blocks | 1 | S | S-R0-018 | TODO | — | — |
+| S-R1-070 | Build dialog primitive | 2 | S | S-R0-018 | TODO | — | — |
+| S-R1-071 | Build full onboarding wizard | 2 | M | S-R1-031, S-R1-032, S-R1-065, S-R1-066, S-R1-068 | TODO | — | — |
+| S-R1-072 | Build dashboard screen | 2 | M | S-R1-020, S-R1-065, S-R1-067, S-R1-068, S-R1-069 | TODO | — | — |
+| S-R1-073 | Build tasks screen | 2 | M | S-R1-018, S-R1-065, S-R1-066, S-R1-067, S-R1-069, S-R1-072 | TODO | — | — |
+| S-R1-074 | Build plan screen | 2 | M | S-R1-019, S-R1-059, S-R1-065, S-R1-066, S-R1-067, S-R1-069, S-R1-072 | TODO | — | — |
+| S-R1-075 | Build housing evaluate form | 2 | M | S-R1-025, S-R1-065, S-R1-066, S-R1-068 | TODO | — | — |
+| S-R1-076 | Build housing result panel | 2 | M | S-R1-060, S-R1-075 | TODO | — | — |
+| S-R1-077 | Build paste listing flow | 2 | M | S-R1-060, S-R1-070, S-R1-075 | TODO | — | — |
+| S-R1-078 | Build housing compare view | 2 | S | S-R1-024, S-R1-076 | TODO | — | — |
+| S-R1-079 | Build places screen | 2 | M | S-R1-029, S-R1-030, S-R1-065, S-R1-066, S-R1-068, S-R1-069 | TODO | — | — |
+| S-R1-080 | Build concierge screen | 3 | M | S-R1-058, S-R1-065, S-R1-068, S-R1-069 | TODO | — | — |
+| S-R1-081 | Build settings screen | 2 | M | S-R1-021, S-R1-022, S-R1-065, S-R1-066, S-R1-068, S-R1-071 | TODO | — | — |
+| S-R1-082 | Add legal pages and links | 2 | S | S-R0-023 | TODO | — | — |
+| S-R1-083 | Create PostHog project | HUMAN | XS | — | TODO | — | — |
+| S-R1-084 | Add analytics event pipeline | 2 | M | S-R1-013, S-R1-032, S-R1-083 | TODO | — | — |
+| S-R1-085 | Instrument core funnel events | 2 | S | S-R1-017, S-R1-018, S-R1-024, S-R1-025, S-R1-029, S-R1-030, S-R1-058, S-R1-059, S-R1-060, S-R1-084 | TODO | — | — |
+| S-R1-086 | Add client event endpoint and tracker | 2 | S | S-R1-065, S-R1-080, S-R1-084 | TODO | — | — |
+| S-R1-087 | Publish OpenAPI document | 2 | S | S-R1-018, S-R1-019, S-R1-024, S-R1-029, S-R1-058 | TODO | — | — |
+| S-R1-088 | Add API contract tests | 2 | M | S-R1-087 | TODO | — | — |
+| S-R1-089 | Add core journey E2E | 3 | M | S-R1-071, S-R1-072, S-R1-073, S-R1-074, S-R1-076, S-R1-077, S-R1-078, S-R1-079, S-R1-080, S-R1-081 | TODO | — | — |
+| S-R1-090 | Add accessibility checks to E2E | 2 | S | S-R1-089 | TODO | — | — |
+| S-R1-091 | Add bundle size budget | 1 | S | S-R1-080 | TODO | — | — |
+| S-R1-092 | Add dev seed script | 1 | S | S-R1-017, S-R1-024, S-R1-030 | TODO | — | — |
+| S-R1-093 | Delete legacy prototype | 1 | XS | S-R1-002, S-R1-008, S-R1-011, S-R1-037, S-R1-050, S-R1-052, S-R1-053, S-R1-055, S-R1-056, S-R1-081, S-R1-092 | TODO | — | — |
+| S-R1-094 | Create LLM provider key with cap | HUMAN | XS | S-R1-061, S-R1-063 | TODO | — | — |
+| S-R1-095 | Run beta readiness review | HUMAN | S | S-R1-063, S-R1-082, S-R1-085, S-R1-086, S-R1-088, S-R1-090, S-R1-091, S-R1-093 | TODO | — | — |
+| S-R2-001 | Add web app manifest and icons | 1 | S | S-R1-095 | TODO | — | — |
+| S-R2-002 | Add service worker for app shell | 2 | M | S-R2-001 | TODO | — | — |
+| S-R2-003 | Persist query cache to IndexedDB | 2 | S | S-R1-065, S-R1-095 | TODO | — | — |
+| S-R2-004 | Add offline mutation outbox | 3 | M | S-R2-003, S-R1-016 | TODO | — | — |
+| S-R2-005 | Add offline indicator and states | 1 | S | S-R2-003, S-R2-004 | TODO | — | — |
+| S-R2-006 | Add install prompt | 2 | S | S-R2-001, S-R2-002 | TODO | — | — |
+| S-R2-007 | Run housing math offline | 2 | S | S-R2-003, S-R2-005 | TODO | — | — |
+| S-R2-008 | Verify desktop PWA install | HUMAN | S | S-R2-002, S-R2-004, S-R2-005, S-R2-006, S-R2-007 | TODO | — | — |
+| S-R2-009 | Implement readiness score in domain | 2 | S | S-R1-005, S-R1-095 | TODO | — | — |
+| S-R2-010 | Add readiness to dashboard endpoint | 2 | S | S-R2-009 | TODO | — | — |
+| S-R2-011 | Build readiness block and My Life grid | 2 | M | S-R2-010 | TODO | — | — |
+| S-R2-012 | Add dark theme tokens | 2 | S | S-R0-017, S-R1-095 | TODO | — | — |
+| S-R2-013 | Add theme switcher | 1 | XS | S-R2-012 | TODO | — | — |
+| S-R2-014 | Run accessibility audit and fixes | 3 | M | S-R1-090 | TODO | — | — |
+| S-R2-015 | Add reduced motion and zoom support | 2 | S | S-R2-014 | TODO | — | — |
+| S-R2-016 | Add pseudo-locale and RTL smoke test | 2 | S | S-R0-020, S-R1-095 | TODO | — | — |
+| S-R2-017 | Add onboarding timing metric | 1 | XS | S-R1-086 | TODO | — | — |
+| S-R2-018 | Add data export endpoint | 2 | M | S-R1-095, S-R2-022 | TODO | — | — |
+| S-R2-019 | Add account deletion endpoint | 3 | M | S-R2-018, S-R2-022 | TODO | — | — |
+| S-R2-020 | Build privacy controls in settings | 2 | M | S-R2-018, S-R2-019, S-R1-070, S-R1-081 | TODO | — | — |
+| S-R2-021 | Add retention purge job | 2 | S | S-R1-015, S-R1-095 | TODO | — | — |
+| S-R2-022 | Add audit log | 2 | S | S-R1-013, S-R1-095 | TODO | — | — |
+| S-R2-023 | Add analytics consent handling | 2 | S | S-R1-084, S-R1-086, S-R2-022 | TODO | — | — |
+| S-R2-024 | Finalise privacy policy and terms | HUMAN | S | S-R1-082, S-R2-019, S-R2-021, S-R2-023 | TODO | — | — |
+| S-R2-025 | Add scheduled database export backup | 2 | S | S-R0-038, S-R1-095 | TODO | — | — |
+| S-R2-026 | Rehearse database restore | HUMAN | S | S-R2-025 | TODO | — | — |
+| S-R2-027 | Run security review checklist | 3 | M | S-R2-019, S-R2-021, S-R2-022, S-R2-032, S-R2-038 | TODO | — | — |
+| S-R2-028 | Buy domain and move DNS | HUMAN | S | — | TODO | — | — |
+| S-R2-029 | Attach custom domains to Worker | 2 | S | S-R2-028 | TODO | — | — |
+| S-R2-030 | Create Resend account and verify domain | HUMAN | XS | S-R2-028 | TODO | — | — |
+| S-R2-031 | Add email sender adapter | 2 | S | S-R2-030 | TODO | — | — |
+| S-R2-032 | Add magic link sign-in | 3 | M | S-R2-029, S-R2-031 | TODO | — | — |
+| S-R2-033 | Add notification table and API | 2 | M | S-R1-013, S-R1-095 | TODO | — | — |
+| S-R2-034 | Build notification centre | 2 | S | S-R2-033 | TODO | — | — |
+| S-R2-035 | Add reminder rules in domain | 2 | S | S-R1-006, S-R1-010, S-R1-095 | TODO | — | — |
+| S-R2-036 | Add reminder scheduler job | 2 | M | S-R2-033, S-R2-035 | TODO | — | — |
+| S-R2-037 | Add email digest delivery | 2 | S | S-R2-031, S-R2-036 | TODO | — | — |
+| S-R2-038 | Add web push subscription and delivery | 3 | M | S-R2-002, S-R2-036, S-R0-047 | TODO | — | — |
+| S-R2-039 | Add notification preferences | 2 | S | S-R2-033, S-R2-037 | TODO | — | — |
+| S-R2-040 | Enrol in Apple Developer Program | HUMAN | S | — | TODO | — | — |
+| S-R2-041 | Register Google Play developer account | HUMAN | S | — | TODO | — | — |
+| S-R2-042 | Create native OAuth clients | HUMAN | S | S-R2-040, S-R2-041 | TODO | — | — |
+| S-R2-043 | Scaffold Capacitor project | 3 | M | S-R0-044 | TODO | — | — |
+| S-R2-044 | Add shell API base URL and CORS | 2 | S | S-R2-029, S-R2-043 | TODO | — | — |
+| S-R2-045 | Add bearer session storage for shells | 3 | M | S-R2-044 | TODO | — | — |
+| S-R2-046 | Add native Google sign-in | 3 | M | S-R2-042, S-R2-045 | TODO | — | — |
+| S-R2-047 | Add Sign in with Apple | 3 | M | S-R2-040, S-R2-042, S-R2-045 | TODO | — | — |
+| S-R2-048 | Add deep links and app links | 3 | M | S-R2-029, S-R2-043 | TODO | — | — |
+| S-R2-049 | Polish native chrome | 2 | S | S-R2-043 | TODO | — | — |
+| S-R2-050 | Create Firebase project for FCM | HUMAN | XS | S-R2-040, S-R2-041 | TODO | — | — |
+| S-R2-051 | Add native push registration | 3 | M | S-R2-038, S-R2-043, S-R2-048, S-R2-050 | TODO | — | — |
+| S-R2-052 | Add FCM delivery channel | 3 | M | S-R2-036, S-R2-038, S-R2-050 | TODO | — | — |
+| S-R2-053 | Add Sentry to mobile shell | 2 | XS | S-R2-043 | TODO | — | — |
+| S-R2-054 | Ship Android internal test build | HUMAN | S | S-R2-041, S-R2-046, S-R2-049 | TODO | — | — |
+| S-R2-055 | Ship iOS TestFlight build | HUMAN | S | S-R2-040, S-R2-047, S-R2-049 | TODO | — | — |
+| S-R2-056 | Scaffold marketing site | 2 | M | S-R2-029 | TODO | — | — |
+| S-R2-057 | Build landing page | 2 | M | S-R2-056 | TODO | — | — |
+| S-R2-058 | Add waitlist endpoint and form | 2 | S | S-R2-056 | TODO | — | — |
+| S-R2-059 | Add in-app feedback form | 2 | S | S-R1-081 | TODO | — | — |
+| S-R2-060 | Add account linking in settings | 2 | S | S-R2-032, S-R2-047 | TODO | — | — |
+| S-R2-061 | Set up beta programme | HUMAN | S | S-R2-057, S-R2-058, S-R2-059 | TODO | — | — |
+| S-R2-062 | Run release readiness review | HUMAN | S | S-R2-008, S-R2-014, S-R2-020, S-R2-027, S-R2-039, S-R2-054, S-R2-055, S-R2-060, S-R2-061 | TODO | — | — |
+| S-R3-001 | Write store listing copy | 2 | S | S-R2-062 | TODO | — | — |
+| S-R3-002 | Produce store screenshots | 2 | S | S-R3-001 | TODO | — | — |
+| S-R3-003 | Complete store privacy declarations | HUMAN | S | S-R2-024 | TODO | — | — |
+| S-R3-004 | Add minimum version gate | 2 | S | S-R2-043 | TODO | — | — |
+| S-R3-005 | Run Play closed test | HUMAN | S | S-R2-054 | TODO | — | — |
+| S-R3-006 | Submit iOS app for review | HUMAN | S | S-R2-055, S-R3-001, S-R3-002, S-R3-003, S-R3-004 | TODO | — | — |
+| S-R3-007 | Release Android to production | HUMAN | XS | S-R3-001, S-R3-002, S-R3-003, S-R3-004, S-R3-005 | TODO | — | — |
+| S-R3-008 | Define city guide content schema | 2 | S | S-R2-056 | TODO | — | — |
+| S-R3-009 | Build city guide page template | 2 | M | S-R3-008 | TODO | — | — |
+| S-R3-010 | Author five seed city guides | HUMAN | M | S-R3-009 | TODO | — | — |
+| S-R3-011 | Add sitemap and social metadata | 1 | S | S-R3-009 | TODO | — | — |
+| S-R3-012 | Add referral codes and attribution | 2 | M | S-R2-062 | TODO | — | — |
+| S-R3-013 | Build invite screen | 2 | S | S-R3-012 | TODO | — | — |
+| S-R3-014 | Add onboarding email sequence | 2 | M | S-R2-037, S-R2-039 | TODO | — | — |
+| S-R3-015 | Build metrics dashboards | HUMAN | S | S-R1-085 | TODO | — | — |
+| S-R3-016 | Execute launch sequence | HUMAN | M | S-R3-006, S-R3-007, S-R3-010, S-R3-011, S-R3-013, S-R3-015, S-R3-021, S-R3-025, S-R3-029, S-R3-040 | TODO | — | — |
+| S-R3-017 | Add percentage rollout flags | 2 | S | S-R0-007 | TODO | — | — |
+| S-R3-018 | Add experiment assignment and exposure | 2 | S | S-R3-017 | TODO | — | — |
+| S-R3-019 | Run first onboarding experiment | HUMAN | S | S-R3-018 | TODO | — | — |
+| S-R3-020 | Add AI response cache | 2 | S | S-R1-042 | TODO | — | — |
+| S-R3-021 | Add global AI budget kill switch | 2 | S | S-R1-023 | TODO | — | — |
+| S-R3-022 | Add Anthropic provider adapter | 3 | M | S-R1-042 | TODO | — | — |
+| S-R3-023 | Run model bake-off with evals | HUMAN | S | S-R3-022, S-R3-024 | TODO | — | — |
+| S-R3-024 | Add nightly live-model evals | 2 | S | S-R1-063 | TODO | — | — |
+| S-R3-025 | Add cost and usage alerts | 2 | S | S-R3-021, S-R2-031 | TODO | — | — |
+| S-R3-026 | Write SQLite to Postgres copy script | 3 | M | S-R2-025 | TODO | — | — |
+| S-R3-027 | Rehearse Postgres migration | HUMAN | M | S-R3-026 | TODO | — | — |
+| S-R3-028 | Add load test baseline | 2 | S | S-R2-062 | TODO | — | — |
+| S-R3-029 | Rehearse rung 1 upgrade | HUMAN | S | S-R3-028 | TODO | — | — |
+| S-R3-030 | Add language switcher and locale formats | 2 | S | S-R2-016 | TODO | — | — |
+| S-R3-031 | Translate app to Spanish | 2 | M | S-R3-030 | TODO | — | — |
+| S-R3-032 | Translate app to Simplified Chinese | 2 | M | S-R3-030 | TODO | — | — |
+| S-R3-033 | Localise baseline plan templates | 2 | M | S-R3-030 | TODO | — | — |
+| S-R3-034 | Add Arrival Pass fake door | 2 | S | S-R3-018 | TODO | — | — |
+| S-R3-035 | Add disclosed partner links | 2 | S | S-R3-017 | TODO | — | — |
+| S-R3-036 | Add mobile smoke tests | 3 | M | S-R2-054 | TODO | — | — |
+| S-R3-037 | Add Lighthouse budget check | 2 | S | S-R2-002 | TODO | — | — |
+| S-R3-038 | Add map view to places | 2 | M | S-R1-079 | TODO | — | — |
+| S-R3-039 | Review launch metrics and decide | HUMAN | S | S-R3-016 | TODO | — | — |
+| S-R3-040 | Hold beta kill-or-continue review | HUMAN | S | S-R2-062 | TODO | — | — |
+| S-R4-001 | Add connectivity agent slice | 3 | M | S-R3-039 | TODO | — | — |
+| S-R4-002 | Add emergency plan agent slice | 3 | M | S-R3-039 | TODO | — | — |
+| S-R4-003 | Add budget planner agent slice | 3 | M | S-R3-039 | TODO | — | — |
+| S-R4-004 | Add transport routes agent slice | 3 | M | S-R3-038 | TODO | — | — |
+| S-R4-005 | Add grocery planner agent slice | 3 | M | S-R3-039 | TODO | — | — |
+| S-R4-006 | Add health navigation agent slice | 3 | M | S-R3-039 | TODO | — | — |
+| S-R4-007 | Add activities discovery agent slice | 3 | M | S-R3-039 | TODO | — | — |
+| S-R4-008 | Add routine coach agent slice | 3 | M | S-R4-007 | TODO | — | — |
+| S-R4-009 | Build Tauri desktop shell | 3 | M | S-R3-039 | TODO | — | — |
