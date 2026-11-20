@@ -3,7 +3,7 @@
 > **Single entry point** for developers and agents. Read this first; it points to the detailed
 > planning log and board rather than duplicating them. It doubles as the TODO list.
 
-**Last updated:** 2026-11-20 · **Branch:** `exec/batch-01-r0` (base `Architecture`) · **Phase:** R0 execution started; prototype archived, workspace not yet created
+**Last updated:** 2026-11-20 · **Branch:** `exec/batch-01-r0` (base `Architecture`) · **Phase:** R0 execution, 21 of 47 done; paused on human chores
 
 ## Where the detail lives
 | What | File |
@@ -20,7 +20,7 @@
 ## Status
 - Stories on disk: 236 of 253 (R0 47, R1 95, R2 62, R3 32 of 40, R4 0 of 9); 28 ADRs written
 - Last story written: S-R3-032; next to write: **S-R3-033**
-- Execution: R0 21 of 47 done (S-R0-001 `1eadc09ea9`, S-R0-002 `bd5e8e5974`, S-R0-003 `ab87151cd2`, S-R0-004 `3371d9acdb`, S-R0-005 `f13f9afde0`, S-R0-006 `b6461e98c6`, S-R0-007 `262da8479b`, S-R0-008 `d5791fe532`, S-R0-009 `1519f77ad4`, S-R0-010 `7bf7320a06`, S-R0-012 `3bcd997dab`, S-R0-016 `6444d9ff1f`, S-R0-017 `131b4eac71`, S-R0-018 `93ce326ec1`, S-R0-019 `abc7775bd3`, S-R0-020 `e68c439b6d`, S-R0-024 `318bc24327`, S-R0-026 `2158cf0b72`, S-R0-031 `dbc97ceb18`, S-R0-032 `d37cd66db5`, S-R0-033 `8ca1e1d674`); batch 01 on `exec/batch-01-r0`, PR [#2](https://github.com/alpeshrpatel/student-life-journey/pull/2); next: S-R0-007
+- Execution: R0 21 of 47 done (S-R0-001 `1eadc09ea9`, S-R0-002 `bd5e8e5974`, S-R0-003 `ab87151cd2`, S-R0-004 `3371d9acdb`, S-R0-005 `f13f9afde0`, S-R0-006 `b6461e98c6`, S-R0-007 `262da8479b`, S-R0-008 `d5791fe532`, S-R0-009 `1519f77ad4`, S-R0-010 `7bf7320a06`, S-R0-012 `3bcd997dab`, S-R0-016 `6444d9ff1f`, S-R0-017 `131b4eac71`, S-R0-018 `93ce326ec1`, S-R0-019 `abc7775bd3`, S-R0-020 `e68c439b6d`, S-R0-024 `318bc24327`, S-R0-026 `2158cf0b72`, S-R0-031 `dbc97ceb18`, S-R0-032 `d37cd66db5`, S-R0-033 `8ca1e1d674`); single R0 branch `exec/batch-01-r0` (base `Architecture`), PR [#2](https://github.com/alpeshrpatel/student-life-journey/pull/2). R0 is paused: every remaining story waits on a human chore (S-R0-011, S-R0-036, S-R0-039) or on S-R0-021 (`me()`)
 
 ## Next / TODO
 - [ ] Write remaining stories S-R3-033..040 and S-R4-001..009, then `tracker.py sync`
@@ -28,7 +28,9 @@
 - [ ] Review the key ADRs (platform, data/DB, ORM, auth, stack-fit gate ADR-0000)
 - [ ] Human chores for R0 (you, outside the code): S-R0-011 Google OAuth web client, S-R0-036 Cloudflare account and databases, S-R0-039 Sentry project (details: `EXECUTION_LOG.md` → Human actions queue)
 - [ ] Use Node 24 locally: run `mise install` in the repo (your default Node is 22.2.0)
-- [ ] Execute R0 walking skeleton (in progress; track with `python3 docs/plan/tools/tracker.py summary`)
+- [ ] Unblock R0: after S-R0-011, run `/run-stories R0` to do S-R0-013, 014, 015, 021 (add `me()`), 022 to 030, 034, 035; after S-R0-036 the deploy stories S-R0-037, 038; after S-R0-039, S-R0-040
+- [ ] GitHub: protect `main` (require the `verify` check) and put your username in `.github/CODEOWNERS` (S-R0-031 follow-up)
+- [ ] Review the wording of `apps/web/src/i18n/locales/en/errors.json` (written by the executor)
 
 ## Blocked / needs owner (from the board, re-check before acting)
 - Push the local branch to GitHub (earlier session had no GitHub access, HTTP 403)

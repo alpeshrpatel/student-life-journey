@@ -37,3 +37,7 @@ run = "pnpm --filter @slj/api build"
 [tasks.check]
 description = "Run every gate: lint, format check, typecheck, test, build"
 depends = ["lint", "format:check", "typecheck", "test", "build"]
+
+[tasks."dev:web"]
+description = "Run the web app (Vite) on http://localhost:5173, proxying /api to the API"
+run = "pnpm --filter @slj/web dev"
