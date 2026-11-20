@@ -293,3 +293,25 @@ The "PR: pending" part is replaced by the pull request link when the PR is opene
 - **Deviations:** Versions for packages the story gives only as a name were resolved to the current majors (`jsdom` ^27, `@testing-library/jest-dom` ^6, `@testing-library/user-event` ^14, `@types/react` and `@types/react-dom` ^19). `router.tsx` also exports `routes` so the test can use `createMemoryRouter`. The placeholder maps `titleKey` to temporary English text; no eslint-disable was needed. The placeholder was checked by HTTP and tests only; no real browser was opened.
 - **Follow-ups for the founder:** The `mise run dev` task starts only the API; run `pnpm --filter @slj/web dev` in a second terminal for the web app (or use root `pnpm dev`).
 
+### S-R0-017 — Add Tide design tokens
+- **Result:** DONE
+- **When:** 2026-11-20T21:51Z · **Tier / size:** 1 / S · **Branch:** `exec/batch-01-r0`
+- **Code commit:** `131b4eac71` — `feat(web): add Tide design tokens (S-R0-017)`
+- **Size of change:** 9 files changed, 210 insertions(+), 2 deletions(-)
+- **What changed:**
+  - `apps/web/src/styles/tokens.css` and `app.css` copied exactly from `07_UX_DESIGN_SYSTEM.md` §5 (Tide semantic colours, type scale, radii, shadows, dark overrides); Tailwind defaults for colour, radius and shadow are removed.
+  - `main.tsx` imports `@fontsource-variable/archivo` (self-hosted) and `app.css`; the placeholder screen uses `bg-ground text-ink`, `text-screen font-extrabold` and a 2 px `border-rule`.
+  - ESLint rule that rejects hex colour literals in `apps/web/src/**/*.{ts,tsx}` (string literals and template parts); test files are exempt.
+- **Verification:**
+  | Command | Result |
+  |---|---|
+  | `pnpm test` | domain 18, contracts 7, web 47, api 48 passed |
+  | `pnpm typecheck / lint / format:check / build` | exit 0 |
+  | `built CSS search` | `--color-ground`, `--color-accent`, `data-theme="dark"` present; `--color-red-500` count 0; `fonts.googleapis` count 0 |
+  | `temporary `.tsx` with `"#ff0000"` and a template `#abc`` | lint exit 1, two `Use a design token utility instead of a hex colour` errors (file removed) |
+  | `Chrome on `pnpm --filter @slj/web dev`` | html background `rgb(242, 245, 244)`, font family starts with "Archivo Variable", font loaded, h1 30px / 800 |
+  | `secret scan on staged diff` | clean |
+- **Acceptance criteria:** AC1 PASS — built CSS check above · AC2 PASS — computed style read in a real browser · AC3 PASS — hex literal fails `pnpm lint`
+- **Deviations:** (1) `tokens.css` and `app.css` are listed in `.prettierignore` so they stay byte-for-byte as pasted. (2) `tokens.test.ts` runs in the node environment (`// @vitest-environment node`) and reads the file with `fs`, because under jsdom `import.meta.url` is not a `file:` URL and `?raw` imports return an empty string. (3) The hex rule block is placed before the test-file block, which turns it off for tests (the token test legitimately contains hex strings).
+- **Follow-ups for the founder:** none
+
