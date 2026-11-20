@@ -167,3 +167,23 @@ The "PR: pending" part is replaced by the pull request link when the PR is opene
 - **Deviations:** (1) pnpm 12 blocks dependency build scripts, so `allowBuilds: {esbuild: true, workerd: true}` was added to the root `pnpm-workspace.yaml` (required for Wrangler's binaries; no other package allowed). (2) `**/.wrangler/**` added to the ESLint ignores in the root `eslint.config.js` (Wrangler writes generated files there; otherwise `pnpm lint` fails). (3) `AppBindings` is an `interface` instead of the story's `type` alias (the `consistent-type-definitions` rule from S-R0-003 rejects the alias; shape is identical). (4) `tsconfig.json` uses `"types": []` and includes `worker-configuration.d.ts`, `test` and `vitest.config.ts`. (5) Prettier formatted `wrangler.jsonc` (adds a trailing comma; Wrangler accepts it).
 - **Follow-ups for the founder:** none. Planner: later stories that add dependencies with install scripts will need the same `allowBuilds` entries (added under Plan issues).
 
+### S-R0-007 — Add configuration module with flags
+- **Result:** DONE
+- **When:** 2026-11-20T21:39Z · **Tier / size:** 1 / S · **Branch:** `exec/batch-01-r0`
+- **Code commit:** `262da8479b` — `feat(api): add configuration module with flags (S-R0-007)`
+- **Size of change:** 8 files changed, 325 insertions(+)
+- **What changed:**
+  - `apps/api/src/config/flags.ts`: `FLAG_DEFAULTS`, `parseFlags` (strict keys, defaults for missing).
+  - `apps/api/src/config/env.ts`: `parseEnv` with the preview/production rules (secret length, Google credentials required, no `TEST_SUPPORT_TOKEN`) and the dev fallback secret.
+  - `GET /api/v1/config` route and `ConfigResponseSchema` in `@slj/contracts`; `apps/api/.dev.vars.example` listing every secret from ADR-0024.
+- **Verification:**
+  | Command | Result |
+  |---|---|
+  | `pnpm test` | domain 18, contracts 7, api 14 passed |
+  | `pnpm typecheck / lint / format:check` | exit 0 |
+  | `mise run dev + curl localhost:8787/api/v1/config` | seven flags with defaults, minClientVersion 0.0.0, legal 2026-11-beta |
+  | `secret scan on staged diff` | clean |
+- **Acceptance criteria:** AC1 PASS — config route test + curl · AC2 PASS — `parseFlags` override test · AC3 PASS — production short secret and `TEST_SUPPORT_TOKEN` tests (error names the variable) · AC4 PASS — unknown flag key throws
+- **Deviations:** `.dev.vars.example` lists every secret-kind name from ADR-0024 (not the plain vars), grouped with the story that first needs it. The route passes `{ ...c.env }` to `parseEnv` so the generated `Env` interface fits `Record<string, unknown>`.
+- **Follow-ups for the founder:** none
+
