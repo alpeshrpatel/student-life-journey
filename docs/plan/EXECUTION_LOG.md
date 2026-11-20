@@ -15,7 +15,9 @@
 - [ ] S-R0-036 — Create Cloudflare account and databases — read docs/plan/stories/R0/S-R0-036-….md — unblocks: S-R0-037, …
 When you finish one: tick the box, and for a HUMAN-tier story run `python3 docs/plan/tools/tracker.py set <id> DONE`. -->
 
-(empty)
+- [ ] S-R0-011 — Create Google OAuth web client — read docs/plan/stories/R0/S-R0-011-create-google-oauth-web-client.md — unblocks: S-R0-013
+- [ ] S-R0-036 — Create Cloudflare account and databases — read docs/plan/stories/R0/S-R0-036-create-cloudflare-account-and-databases.md — unblocks: S-R0-037
+- [ ] S-R0-039 — Create Sentry project — read docs/plan/stories/R0/S-R0-039-create-sentry-project.md — unblocks: S-R0-040
 
 ## Plan issues found
 
@@ -30,3 +32,26 @@ When you finish one: tick the box, and for a HUMAN-tier story run `python3 docs/
 <!-- Newest batch last. Each batch starts with a heading of this exact shape, written when its first story starts:
 ## Batch 01 — R0 — branch `exec/batch-01-r0` — base `main` — PR: pending
 The "PR: pending" part is replaced by the pull request link when the PR is opened. -->
+
+## Batch 01 — R0 — branch `exec/batch-01-r0` — base `Architecture` — PR: pending
+
+### S-R0-001 — Archive prototype under legacy
+- **Result:** DONE
+- **When:** 2026-11-20T20:56Z · **Tier / size:** 1 / S · **Branch:** `exec/batch-01-r0`
+- **Code commit:** `1eadc09ea9` — `refactor(repo): archive prototype under legacy (S-R0-001)`
+- **Size of change:** 104 files changed, 24 insertions(+), 3169 deletions(-); main areas: `legacy/prototype/`, `.gitignore`, `package-lock.json` (deleted)
+- **What changed:**
+  - Moved `src/`, `prisma/` and the Next.js config files (`package.json`, `next-env.d.ts`, `next.config.mjs`, `postcss.config.mjs`, `tailwind.config.ts`, `tsconfig.json`) to `legacy/prototype/` with `git mv` (99 renames, all R100, contents unchanged).
+  - Deleted the tracked `.DS_Store`, `docs/.DS_Store` and `package-lock.json`.
+  - Added `.gitignore` (exact content from the story) and `legacy/README.md`.
+- **Verification:**
+  | Command | Result |
+  |---|---|
+  | `git ls-files src prisma next.config.mjs package-lock.json .DS_Store` | no output |
+  | `test -f legacy/prototype/src/tools/calculator/housing-calculator.ts && echo ok` | ok |
+  | `touch .DS_Store && git status --short .DS_Store` (before deleting the files from the index it showed the deletion only) | file ignored (`git check-ignore` matches `.gitignore:13`) |
+  | secret scan on staged diff | `exit=1` (clean) |
+  | `pnpm typecheck/lint/test` | not run: no workspace exists yet (S-R0-002/003) |
+- **Acceptance criteria:** AC1 PASS — `git ls-files` for root `src`, `prisma`, `next.config.mjs`, `package-lock.json` prints nothing; root contains only `docs`, `legacy`, `.claude` and the two untracked founder files · AC2 PASS — `git diff --cached -M` reports `R100` for the calculator file at its new path · AC3 PASS — a freshly created `.DS_Store` is ignored (`git check-ignore -v` shows `.gitignore:13`)
+- **Deviations:** (1) Worked on the batch branch `exec/batch-01-r0` instead of the story's `refactor/S-R0-001-archive-prototype` (the executor prompt wins on process). (2) Batch base is `Architecture` (the branch checked out at start; `main` does not yet contain the plan). (3) `docs/TechnicalArchitecture.docx` was already absent from the index, so nothing to stage for it. (4) Start-of-run check found two untracked founder files (`CLAUDE.md`, `PROGRESS_LOG.md`); the run continued because the founder's ARGS ask for `PROGRESS_LOG.md` to be maintained; they were never staged in story commits.
+- **Follow-ups for the founder:** none
