@@ -26,6 +26,7 @@ When you finish one: tick the box, and for a HUMAN-tier story run `python3 docs/
 - S-R0-002 — pnpm 12 ignores `engine-strict` in `.npmrc`, so the Node 20/22 install does not fail (AC3) — add `engineStrict: true` to the `pnpm-workspace.yaml` content in the story (applied by the executor)
 - S-R0-003 — `pnpm format:check` fails on `docs/**` (288 markdown files) but the story forbids touching `docs/**` and its `.prettierignore` list omits it — add `docs/`, `.claude/` to the story's `.prettierignore` list (applied by the executor)
 - S-R0-004 — `tsconfig.json` with `"include": ["src"]` leaves `vitest.config.ts` outside the TypeScript project, so `pnpm lint` fails with a parsing error — use `"include": ["src", "vitest.config.ts"]` here and in later package stories (applied by the executor)
+- S-R0-006 — pnpm 12 blocks build scripts (`ERR_PNPM_IGNORED_BUILDS` for `esbuild`, `workerd`) and ESLint scans `.wrangler/` output — add `allowBuilds` to the workspace config and `**/.wrangler/**` to the ESLint ignores (applied by the executor); `AppBindings` must be an `interface` to pass `consistent-type-definitions`
 
 ---
 
@@ -142,4 +143,27 @@ The "PR: pending" part is replaced by the pull request link when the PR is opene
 - **Acceptance criteria:** AC1 PASS — two tests parse the health and envelope examples · AC2 PASS — test iterates `ErrorCodeSchema.options` and checks `ERROR_STATUS` · AC3 PASS — tests reject code `NOPE` and `amountMinor: 1.5`, and fail when the protection is removed
 - **Deviations:** `packages/contracts/tsconfig.json` includes `vitest.config.ts` besides `src` (same reason as S-R0-004). `z.string().datetime()` exists in Zod 4 (marked deprecated in favour of `z.iso.datetime()`), used as the story says.
 - **Follow-ups for the founder:** none
+
+### S-R0-006 — Scaffold API Worker with health route
+- **Result:** DONE
+- **When:** 2026-11-20T21:05Z · **Tier / size:** 2 / M · **Branch:** `exec/batch-01-r0`
+- **Code commit:** `b6461e98c6` — `feat(api): scaffold API Worker with health route (S-R0-006)`
+- **Size of change:** 12 files changed, 17694 insertions(+), 10 deletions(-); main areas: `apps/api/`, `pnpm-workspace.yaml`, `eslint.config.js`, `pnpm-lock.yaml`
+- **What changed:**
+  - New package `@slj/api`: Hono + `@hono/zod-openapi` app (`buildApp()`), `GET /api/v1/health` validated against `HealthResponseSchema`, `wrangler.jsonc` as specified, generated `worker-configuration.d.ts`.
+  - Tests run inside `workerd` through `@cloudflare/vitest-plugin` (`cloudflareTest`, `exports` from `cloudflare:workers`).
+  - Allowed install scripts for `esbuild` and `workerd` in `pnpm-workspace.yaml` (`allowBuilds`); added `**/.wrangler/**` to the ESLint ignores.
+- **Verification:**
+  | Command | Result |
+  |---|---|
+  | `pnpm --filter @slj/api test` | 2 passed (in workerd) |
+  | `pnpm typecheck` | exit 0 (3 packages) |
+  | `pnpm lint` / `pnpm format:check` | exit 0 |
+  | `pnpm test` | domain 18, contracts 7, api 2 passed |
+  | `pnpm --filter @slj/api build` (`wrangler deploy --dry-run`, nothing deployed) | exit 0 |
+  | `pnpm --filter @slj/api dev` + `curl localhost:8787/api/v1/health` | `{"status":"ok","version":"0.1.0","time":"..."}`; `/api/v1/nope` returns 404 |
+  | secret scan on staged diff | `exit=1` (clean) |
+- **Acceptance criteria:** AC1 PASS — test "returns ok and matches the contract" and the curl above · AC2 PASS — the test imports `exports` from `cloudflare:workers` and runs in workerd · AC3 PASS — test "unknown route is 404" and curl
+- **Deviations:** (1) pnpm 12 blocks dependency build scripts, so `allowBuilds: {esbuild: true, workerd: true}` was added to the root `pnpm-workspace.yaml` (required for Wrangler's binaries; no other package allowed). (2) `**/.wrangler/**` added to the ESLint ignores in the root `eslint.config.js` (Wrangler writes generated files there; otherwise `pnpm lint` fails). (3) `AppBindings` is an `interface` instead of the story's `type` alias (the `consistent-type-definitions` rule from S-R0-003 rejects the alias; shape is identical). (4) `tsconfig.json` uses `"types": []` and includes `worker-configuration.d.ts`, `test` and `vitest.config.ts`. (5) Prettier formatted `wrangler.jsonc` (adds a trailing comma; Wrangler accepts it).
+- **Follow-ups for the founder:** none. Planner: later stories that add dependencies with install scripts will need the same `allowBuilds` entries (added under Plan issues).
 
