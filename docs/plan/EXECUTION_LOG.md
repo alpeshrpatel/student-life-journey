@@ -24,6 +24,7 @@ When you finish one: tick the box, and for a HUMAN-tier story run `python3 docs/
 <!-- One line each: story id — what is wrong — suggested fix. The agent never edits the plan; the planner reads this list. -->
 
 - S-R0-002 — pnpm 12 ignores `engine-strict` in `.npmrc`, so the Node 20/22 install does not fail (AC3) — add `engineStrict: true` to the `pnpm-workspace.yaml` content in the story (applied by the executor)
+- S-R0-003 — `pnpm format:check` fails on `docs/**` (288 markdown files) but the story forbids touching `docs/**` and its `.prettierignore` list omits it — add `docs/`, `.claude/` to the story's `.prettierignore` list (applied by the executor)
 
 ---
 
@@ -76,4 +77,26 @@ The "PR: pending" part is replaced by the pull request link when the PR is opene
 - **Acceptance criteria:** AC1 PASS — frozen-lockfile install exit 0 on Node 24.22.3 · AC2 PASS — typecheck and test exit 0 · AC3 PASS — Node 22 install fails with the engine error (after the deviation below)
 - **Deviations:** pnpm 12 ignores `engine-strict` in `.npmrc`, so AC3 failed with only the specified files (Node 22 installed without error). Added `engineStrict: true` to `pnpm-workspace.yaml` (the tool's current option location). `.npmrc` still has the two specified lines.
 - **Follow-ups for the founder:** your machine's default Node is 22.2.0; use `mise` (`mise install`) or `mise exec --` so Node 24.22.3 and pnpm 12.18.0 are active. Planner: story S-R0-002 should list `engineStrict: true` in `pnpm-workspace.yaml` (added under Plan issues).
+
+### S-R0-003 — Add lint and format toolchain
+- **Result:** DONE
+- **When:** 2026-11-20T21:01Z · **Tier / size:** 2 / S · **Branch:** `exec/batch-01-r0`
+- **Code commit:** `ab87151cd2` — `build(repo): add lint and format toolchain (S-R0-003)`
+- **Size of change:** 5 files changed, 2398 insertions(+), 12 deletions(-); main areas: `eslint.config.js`, `.prettierrc.json`, `.prettierignore`, `package.json`, `pnpm-lock.yaml`
+- **What changed:**
+  - Added ESLint 9.39.5 (flat config with the seven scoped blocks from the story), typescript-eslint 8.73.0, react / react-hooks / jsx-a11y plugins, Prettier 3.10.1 and `globals`.
+  - Added scripts `lint`, `format`, `format:check`; added `.prettierrc.json` and `.prettierignore`.
+- **Verification:**
+  | Command | Result |
+  |---|---|
+  | `pnpm lint` | exit 0 |
+  | `pnpm format:check` | exit 0 |
+  | `pnpm typecheck` / `pnpm test` | exit 0 |
+  | `pnpm exec eslint --print-config apps/web/src/screens/x.tsx \| grep -c jsx-no-literals` | 1 |
+  | temp `packages/tmp/src/x.ts` with `any` + `console.log` | `no-explicit-any` and `no-console` errors reported (plus 2 unsafe-* errors); file removed |
+  | `eslint legacy/prototype/src/tools/calculator/housing-calculator.ts` | "File ignored because of a matching ignore pattern" |
+  | secret scan on staged diff | `exit=1` (clean) |
+- **Acceptance criteria:** AC1 PASS — lint and format:check exit 0 · AC2 PASS — both `any` and `console.log` reported as errors · AC3 PASS — legacy file ignored
+- **Deviations:** (1) `.prettierignore` also lists `docs/`, `.claude/`, `CLAUDE.md`, `PROGRESS_LOG.md`: otherwise `format:check` fails on 288 markdown files and the story forbids touching `docs/**`. (2) The temp file for the negative check needed a temporary `packages/tmp/tsconfig.json` because the type-aware parser requires the file to be in a tsconfig project (removed afterwards). (3) `@eslint/js` is not installed (not in the story's dependency list), so the ESLint core recommended set is not enabled; the typescript-eslint sets are. (4) React Hooks rules are taken from `reactHooks.configs.recommended.rules` (plugin v5 has no flat preset in this setup). (5) Installed `eslint@9.39.5` is flagged deprecated by npm (10.x exists) but is within the story's `^9` range.
+- **Follow-ups for the founder:** none. Planner: S-R0-003 should add `docs/` and the root markdown files to `.prettierignore` (added under Plan issues).
 
