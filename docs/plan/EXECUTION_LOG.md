@@ -123,3 +123,23 @@ The "PR: pending" part is replaced by the pull request link when the PR is opene
 - **Deviations:** `packages/domain/tsconfig.json` includes `vitest.config.ts` in addition to `src` (the story says `["src"]`); without it ESLint's type-aware parser fails on `vitest.config.ts` and `pnpm lint` exits 1.
 - **Follow-ups for the founder:** none. Planner: the same tsconfig `include` fix applies to every later package story that adds a `vitest.config.ts` (added under Plan issues).
 
+### S-R0-005 — Create contracts package with error codes
+- **Result:** DONE
+- **When:** 2026-11-20T21:03Z · **Tier / size:** 1 / S · **Branch:** `exec/batch-01-r0`
+- **Code commit:** `f13f9afde0` — `feat(contracts): create contracts package with error codes (S-R0-005)`
+- **Size of change:** 9 files changed, 158 insertions(+); main areas: `packages/contracts/`, `pnpm-lock.yaml`
+- **What changed:**
+  - New package `@slj/contracts` (depends on `@slj/domain` via `workspace:*` and `zod`).
+  - `ErrorCodeSchema`, `ERROR_STATUS`, `ErrorEnvelopeSchema`, `MoneySchema`, `IsoInstantSchema`, `HealthResponseSchema` exactly as specified, re-exported from `src/index.ts`.
+  - 7 unit tests in `src/contracts.test.ts`.
+- **Verification:**
+  | Command | Result |
+  |---|---|
+  | `pnpm --filter @slj/contracts test` | 7 passed |
+  | `pnpm typecheck` / `pnpm lint` / `pnpm format:check` / `pnpm test` | exit 0 (domain 18 + contracts 7 tests) |
+  | mutation: money `.int()` removed and error `code` loosened to `z.string()` | both AC3 tests fail (restored afterwards) |
+  | secret scan on staged diff | `exit=1` (clean) |
+- **Acceptance criteria:** AC1 PASS — two tests parse the health and envelope examples · AC2 PASS — test iterates `ErrorCodeSchema.options` and checks `ERROR_STATUS` · AC3 PASS — tests reject code `NOPE` and `amountMinor: 1.5`, and fail when the protection is removed
+- **Deviations:** `packages/contracts/tsconfig.json` includes `vitest.config.ts` besides `src` (same reason as S-R0-004). `z.string().datetime()` exists in Zod 4 (marked deprecated in favour of `z.iso.datetime()`), used as the story says.
+- **Follow-ups for the founder:** none
+
