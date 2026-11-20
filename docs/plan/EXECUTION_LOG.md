@@ -394,3 +394,24 @@ The "PR: pending" part is replaced by the pull request link when the PR is opene
 - **Why blocked:** `MeResponse` contract (`packages/contracts/src/me.ts`) is missing.
 - **Needed to unblock:** finish S-R0-011 (human), then S-R0-013 and S-R0-014; then add `me(): Promise<MeResponse>` using `MeResponseSchema` on `GET /api/v1/me` and a test, and mark S-R0-021 DONE. S-R0-022 depends on this story.
 
+### S-R0-024 — Add relocation profile table and repository
+- **Result:** DONE
+- **When:** 2026-11-20T21:58Z · **Tier / size:** 2 / M · **Branch:** `exec/batch-01-r0`
+- **Code commit:** `318bc24327` — `feat(api): add relocation profile table and repository (S-R0-024)`
+- **Size of change:** 10 files changed, 849 insertions(+), 2 deletions(-)
+- **What changed:**
+  - `relocation_profile` table (`schema/relocation.ts`, pasted from `06_DATA_AND_AUTH.md` §2) and generated migration `0001_relocation_profile.sql` (one `CREATE TABLE`, FK cascade to `user`); auth schema and `0000_auth.sql` untouched.
+  - `modules/relocation/ports.ts` (`RelocationProfile`, `RelocationProfileInput`, `RelocationRepository`) and `DrizzleRelocationRepository` (`findByUser`, single-statement `upsert` with `onConflictDoUpdate ... returning`, `createdAt` kept on update; epoch-ms numbers at the boundary).
+  - `relocationRepo` added to the container; test builders `aUser()` and `aRelocationProfile()`.
+- **Verification:**
+  | Command | Result |
+  |---|---|
+  | `pnpm test` | domain 18, contracts 7, api-client 12, web 107, api 56 passed |
+  | `pnpm typecheck / lint / format:check / build` | exit 0 |
+  | `grep -c "CREATE TABLE" apps/api/migrations/0001_relocation_profile.sql` | 1 |
+  | `pnpm --filter @slj/api db:migrate:local` | `0001_relocation_profile.sql` applied |
+  | `secret scan on staged diff` | clean |
+- **Acceptance criteria:** AC1 PASS — `findByUser` returns null · AC2 PASS — one row, new destination, `createdAt` 1000 unchanged, `updatedAt` 5000 · AC3 PASS — prefs round-trip · AC4 PASS — upsert for a missing user rejects (FK) · AC5 PASS — null after deleting the user
+- **Deviations:** `pnpm depcruise` does not exist yet (S-R0-032), so it was not run. The repository test also asserts that `upsert` costs exactly one database call. drizzle-kit did not touch the auth tables (stop condition not triggered).
+- **Follow-ups for the founder:** none
+
