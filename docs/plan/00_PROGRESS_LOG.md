@@ -584,12 +584,12 @@ Columns: story · title · executor tier (`1`, `2`, `3`, `HUMAN`) · size · dep
 
 | ID | Title | Tier | Size | Depends on | Status | Commit | PR |
 |---|---|---|---|---|---|---|---|
-| S-R0-001 | Archive prototype under legacy | 1 | S | — | DONE | 1eadc09ea9 | — |
-| S-R0-002 | Initialise pnpm workspace root | 1 | S | S-R0-001 | DONE | bd5e8e5974 | — |
-| S-R0-003 | Add lint and format toolchain | 2 | S | S-R0-002 | DONE | ab87151cd2 | — |
-| S-R0-004 | Create domain package with date math | 1 | S | S-R0-002 | DONE | 3371d9acdb | — |
-| S-R0-005 | Create contracts package with error codes | 1 | S | S-R0-002 | DONE | f13f9afde0 | — |
-| S-R0-006 | Scaffold API Worker with health route | 2 | M | S-R0-004, S-R0-005 | DONE | b6461e98c6 | — |
+| S-R0-001 | Archive prototype under legacy | 1 | S | — | DONE | 1eadc09ea9 | https://github.com/alpeshrpatel/student-life-journey/pull/2 |
+| S-R0-002 | Initialise pnpm workspace root | 1 | S | S-R0-001 | DONE | bd5e8e5974 | https://github.com/alpeshrpatel/student-life-journey/pull/2 |
+| S-R0-003 | Add lint and format toolchain | 2 | S | S-R0-002 | DONE | ab87151cd2 | https://github.com/alpeshrpatel/student-life-journey/pull/2 |
+| S-R0-004 | Create domain package with date math | 1 | S | S-R0-002 | DONE | 3371d9acdb | https://github.com/alpeshrpatel/student-life-journey/pull/2 |
+| S-R0-005 | Create contracts package with error codes | 1 | S | S-R0-002 | DONE | f13f9afde0 | https://github.com/alpeshrpatel/student-life-journey/pull/2 |
+| S-R0-006 | Scaffold API Worker with health route | 2 | M | S-R0-004, S-R0-005 | DONE | b6461e98c6 | https://github.com/alpeshrpatel/student-life-journey/pull/2 |
 | S-R0-007 | Add configuration module with flags | 1 | S | S-R0-006 | TODO | — | — |
 | S-R0-008 | Add error envelope and request IDs | 2 | S | S-R0-005, S-R0-006 | TODO | — | — |
 | S-R0-009 | Add structured request logging | 1 | XS | S-R0-008 | TODO | — | — |

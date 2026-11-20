@@ -36,7 +36,7 @@ When you finish one: tick the box, and for a HUMAN-tier story run `python3 docs/
 ## Batch 01 — R0 — branch `exec/batch-01-r0` — base `main` — PR: pending
 The "PR: pending" part is replaced by the pull request link when the PR is opened. -->
 
-## Batch 01 — R0 — branch `exec/batch-01-r0` — base `Architecture` — PR: pending
+## Batch 01 — R0 — branch `exec/batch-01-r0` — base `Architecture` — PR: https://github.com/alpeshrpatel/student-life-journey/pull/2
 
 ### S-R0-001 — Archive prototype under legacy
 - **Result:** DONE
